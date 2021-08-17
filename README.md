@@ -26,4 +26,36 @@
         }
     };
 
+2.移除元素
+暴力解决的方法着重注意的地方就是当集体前移之后，要注意size--，否则后面都是相同的val，不好处理。尤其注意的是for循环，应当小于size，而不是nums.size()!!!!!!!
+双指针法重点是思路，看快指针指的元素是否等于val，等于的话，则慢指针不动，快指针后移；不等的话，快指针的值赋值给慢指针，俩人一起后移。
 
+暴力解法
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int size = nums.size();
+        for(int i = 0;i < size;i++){
+            if(nums[i] == val){
+                for(int j = i;j < size-1;j++){
+                    nums[j] = nums[j+1];
+                }
+                i--;
+                size --;
+            }
+        }
+        return size;
+    }
+};
+双指针
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int slow = 0;
+        for(int fast = 0;fast < nums.size();fast++)
+            if(nums[fast] != val)
+                nums[slow++] = nums[fast];
+        
+        return slow;
+    }
+};
