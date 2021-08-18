@@ -60,3 +60,36 @@ public:
         return slow;
     }
 };
+
+                                                   
+                                                   
+                                                   
+                                                   
+3.有序数组的平方
+双指针法，或者暴力解法，暴力解法没什么可写的，双指针法的话，一定要注意声明数组时候，要给他初始化一个大小，否则运行时会出错！
+                                                   class Solution {
+public:
+    vector<int> sortedSquares(vector<int>& nums) {
+        vector<int> res(nums.size());
+        int left = 0;
+        int right = nums.size() - 1;
+        
+        // cout<<"right = "<<right<<endl;
+        for(int i = nums.size() - 1;i >= 0;i --){
+            //cout<<"nums[left] = "<<nums[left]<<endl;
+            //cout<<"nums[right] = "<<nums[right]<<endl;
+            if((nums[left] * nums[left]) >= (nums[right] * nums[right])){
+
+                res[i] = nums[left] * nums[left];
+                // cout<<"res[i]"<<res[i]<<endl;
+                left ++;
+            }else{
+                // cout<<"nums[right] = "<<nums[right]<<endl;
+                res[i] = nums[right] * nums[right];
+                // cout<<"res[i]"<<res[i]<<endl;
+                right --;
+            }
+        }
+        return res;
+    }
+};
