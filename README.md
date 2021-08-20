@@ -1,4 +1,17 @@
-力扣刷题
+100大盗，是男人就做100道！
+==================
+目录
+---
+1.二分查找
+
+2.移除元素
+
+3.有序数组的平方
+
+4.长度最小的子数组
+
+***************************
+最新的在最前面！
 
 1.二分查找
 
@@ -6,25 +19,30 @@
 难点是边界条件，区间的定义要想清楚，区间的定义就是不变量，要在二分查找过程中保持不变。
 左闭右闭，那么边界条件就是left==right,right初始应当取size-1。
 
-    class Solution {
-    public:
-        int search(vector<int>& nums, int target) {
-            int left = 0;
-            int right = nums.size() - 1;
-            int middle;
-            while(left <= right){
-                middle = left + (right - left) / 2;
-                if(nums[middle] < target){
-                    left = middle + 1;
-                }else if(nums[middle] > target){
-                    right = middle - 1;
-                }else{
-                    return middle;
-                }
+···cpp
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size() - 1;
+        int middle;
+        while(left <= right){
+            middle = left + (right - left) / 2;
+            if(nums[middle] < target){
+                left = middle + 1;
+            }else if(nums[middle] > target){
+                right = middle - 1;
+            }else{
+                return middle;
             }
-            return -1;
         }
-    };
+        return -1;
+    }
+};
+···
+
+
+    
 
 2.移除元素
 暴力解决的方法着重注意的地方就是当集体前移之后，要注意size--，否则后面都是相同的val，不好处理。尤其注意的是for循环，应当小于size，而不是nums.size()!!!!!!!
@@ -124,25 +142,5 @@ public:
     
 
 滑窗（双指针）解法：同样要设置中间变量存当前长度最小的，思路就是两个指针，i和j，i一直往前动，直到比target大了，就停下！记录下当前长度，然后将j指针往前移动一位，再判断是否比target大，还大则接着记录当前target，如果不大了呢，就令i往前移动一个，接着判断是否比target大。同样的，也应当注意第一次的也就是刚开始比较，第一次累和大于target的时候，需要判断res是否为0，为0则将中间变量赋值给res，作为初始的那个来比较。
-    class Solution {
-public:
-    int minSubArrayLen(int target, vector<int>& nums) {
-        int sum = 0;
-        int res = 0;
-        int restemp = 0;
-        int j = 0;
-        for(int i = 0;i < nums.size();i ++){
-            sum = sum + nums[i];
-            while(sum >= target){
-                restemp = i - j + 1;
-                if(res > restemp || res == 0){
-                    res = restemp;
-                }
-                sum = sum - nums[j];
-                j++;
-            }
-        }
-        return res;
-    }
-};
+    [README.md](https://github.com/XidianLemon/-100T-/files/7020122/README.md)
     
