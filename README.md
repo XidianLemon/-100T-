@@ -23,7 +23,27 @@ TODO
 
 ## 二、链表
 
-TODO
+### 1.反转链表
+
+这道题有递归方法和循环法。递归法的c++版本要注意刚开始判断如果head本身为空则返回空，如果只有一个head，则返回head，尤其注意先判断head本身是不是空，否则就会出现错误。递归的这一步是转换除了头节点外的节点，即第二个节点到最后一个节点，转换完毕后，原头结点的next本身指向了第二个节点，那么应当让第二个节点的next指向head本身。而head的next应当指向null。
+```
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(head == NULL){
+            return NULL;
+        }
+        if(head->next == NULL){
+            return head;
+        }
+        ListNode * last = reverseList(head->next);
+        head->next->next = head;
+        head->next = NULL;
+        return last;
+    }
+};
+```
+
 
 ----------
 
