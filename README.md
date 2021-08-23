@@ -45,6 +45,30 @@ TODO
         }
     };
 
+部分反转，此题为92. 反转链表 II，这道题按照下面的方法，先让pre移动到要反转区间的前驱，cur移动到反转区间第一个，cur和第三项相连，第二项和前驱相连，这样就让cur变到了第二位。cur再和下下位相连，下一位在和pre相连。也就是每一次将后面一项提到前面，前面往后移。反转次数就是right - left。
+
+```
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        ListNode* dummy = new ListNode(-1);
+        dummy->next = head;
+        ListNode* pre = dummy;
+        for(int i = 0;i < left - 1;i++){
+            pre = pre->next;
+        }
+        ListNode* cur = pre->next;
+        for(int j = left;j < right;j++){
+            ListNode* t = cur->next;
+            cur->next = t->next;
+            t->next = pre->next;
+            pre->next = t;
+        }
+        return dummy->next;
+    }
+
+};
+```
 ----------
 
 ## 一、数组
