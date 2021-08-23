@@ -15,7 +15,8 @@
 数组总结
 
 ### 二、链表
-TODO
+1.反转链表
+
 ### 三、哈希表
 TODO
 
@@ -23,27 +24,26 @@ TODO
 
 ## 二、链表
 
-### 1.反转链表
+## 1.反转链表
 
-这道题有递归方法和循环法。递归法的c++版本要注意刚开始判断如果head本身为空则返回空，如果只有一个head，则返回head，尤其注意先判断head本身是不是空，否则就会出现错误。递归的这一步是转换除了头节点外的节点，即第二个节点到最后一个节点，转换完毕后，原头结点的next本身指向了第二个节点，那么应当让第二个节点的next指向head本身。而head的next应当指向null。
-```
-class Solution {
-public:
-    ListNode* reverseList(ListNode* head) {
-        if(head == NULL){
-            return NULL;
-        }
-        if(head->next == NULL){
-            return head;
-        }
-        ListNode * last = reverseList(head->next);
-        head->next->next = head;
-        head->next = NULL;
-        return last;
-    }
-};
-```
+反转链表目前只做迭代法，不做递归，这种计算机思想暂时不好理解，跳过。
 
+反转链表就从头开始转，首先将head和head.next打开，打开后，就找不到next了，那么就需要用一个变量存head.next。存下来后，就可以放心的将head.next赋值为前一个节点了。前一个节点就需要新建一个变量存。head.next赋值为前一个节点这个操作就是反转了。反转后就令当前的和前一个都后移，就是将当前的赋值前一个，之前存的head.next赋值给当前的，就完成了一起后移。
+
+    class Solution {
+    public:
+        ListNode* reverseList(ListNode* head) {
+            ListNode* pre = NULL;
+            ListNode* temp;
+            while(head){
+                temp = head->next;
+                head->next = pre;
+                pre = head;
+                head = temp;
+            }
+            return pre;
+        }
+    };
 
 ----------
 
