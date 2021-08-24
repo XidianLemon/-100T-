@@ -28,6 +28,78 @@ TODO
 
 反转链表目前只做迭代法，不做递归，这种计算机思想暂时不好理解，跳过。
 
+记得皮城执法官说过的：如果碰壁了，就用力把它碰开。跳过是不可能跳过的，这辈子不可能跳过的。
+
+递归反转它来了！
+首先是全部反转，一上来先判断head是否为null，不这样运行不过哦。然后判断head->next是否为null，这是递归的basecase，如果head的下一个为空则返回head本身。接着将除了头的都反转。最后将头反转。
+```
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if(head == NULL){
+            return NULL;
+        }
+        if(head->next == NULL){
+            return head;
+        }
+        ListNode* res = reverseList(head->next);
+        head->next->next = head;
+        head->next = NULL;
+        return res;
+    }
+};
+```
+再然后是前一部分反转，这部分同样一上来判断head是否为null，然后希望记录下来转之后的后继节点使用nxt记录，当转n-1次后，也就是basecase是转了n-1次则返回此时的头，但是同时必须要记录下来的是后继。接着递归转n-1次，然后再把头反转，同时头的next应当指向后继。
+```
+    ListNode* nxt = NULL;
+    ListNode* reverseN(ListNode* head, int n){
+        if(head == NULL){
+            return NULL;
+        }
+        if(n == 1){
+            nxt = head->next;
+            return head;
+        }
+        ListNode* last = reverseN(head->next, n - 1);
+        head->next->next = head;
+        head->next = nxt;
+        return last;
+    }
+```
+
+最后就是部分反转，部分反转的basecase，就是当left等于1的时候，相当于是前一部分反转，那么此时将头到right都反转，返回的是翻转后的头结点。接着做部分反转的递归，递归后，应当让头的next指向翻转后的头结点。此时已经不用管后继是否街上了因为在前一部分反转时，已经接上了。最后返回头结点就可以了！
+head的next指向反转
+
+```
+class Solution {
+public:
+    ListNode* nxt = NULL;
+    ListNode* reverseN(ListNode* head, int n){
+        if(head == NULL){
+            return NULL;
+        }
+        if(n == 1){
+            nxt = head->next;
+            return head;
+        }
+        ListNode* last = reverseN(head->next, n - 1);
+        head->next->next = head;
+        head->next = nxt;
+        return last;
+    }
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        if(head == NULL){
+            return NULL;
+        }
+        if(left == 1){
+            return reverseN(head, right);
+        }
+        head->next = reverseBetween(head->next, left - 1, right - 1);
+        return head;
+    }
+};
+```
+
 反转链表就从头开始转，首先将head和head.next打开，打开后，就找不到next了，那么就需要用一个变量存head.next。存下来后，就可以放心的将head.next赋值为前一个节点了。前一个节点就需要新建一个变量存。head.next赋值为前一个节点这个操作就是反转了。反转后就令当前的和前一个都后移，就是将当前的赋值前一个，之前存的head.next赋值给当前的，就完成了一起后移。
 
     class Solution {
