@@ -17,12 +17,56 @@
 ### 二、链表
 1.反转链表
 
+2.k个一组反转链表
+
 ### 三、哈希表
 TODO
 
 ----------
 
 ## 二、链表
+
+## 2.k个一组反转链表
+
+这道题首先要想到的是给你两个链表中的节点，让你反转中间这些，比如从a到b反转，那么要注意应当反转的是a到b-1，b不参与反转，因为b就相当于下次的a。
+
+第一个递归函数就是反转从a到a-1，转过来返回的是pre节点，改节点指的是b-1的节点。
+
+第二个递归函数就是k个一组转了，那么首先将b节点转到第k+1个位置，然后调用上面第一个递归输入就是此时的a和b。这是k个一组其中的一组。然后再调用当前递归函数，输入就是b和k，也就是下一组和k个，而返回值应当令a->next指向它即转之后再和下一组转好的连接上。最后返回第一次掉上面第一个递归那个newhead。
+
+```
+class Solution {
+public:
+    ListNode* reverse(ListNode* a, ListNode* b){
+        ListNode* pre = NULL;
+        ListNode* cur = a;
+        ListNode* nxt = a;
+        while(cur != b){
+            nxt = cur->next;
+            cur->next = pre;
+            pre = cur;
+            cur = nxt;
+        }
+        return pre;
+    }
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        if(head == NULL){
+            return NULL;
+        }
+        ListNode* a = head;
+        ListNode* b = head;
+        for(int i = 0;i < k;i ++){
+            if(b == NULL){
+                return head;
+            }
+            b = b->next;
+        }
+        ListNode* newHead = reverse(a, b);
+        a->next = reverseKGroup(b, k);
+        return newHead;
+    }
+};
+```
 
 ## 1.反转链表
 
