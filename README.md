@@ -19,12 +19,43 @@
 
 2.k个一组反转链表
 
+3.移除链表元素
+
 ### 三、哈希表
 TODO
 
 ----------
 
 ## 二、链表
+
+## 3.移除链表元素
+
+第一点就是c++需要手动delete节点，就是当移除了指定的链表元素后，delete它。第二点要注意就是特殊情况，整个一个链表都是指定的值或者从头开始是指定的值，那么应当注意的是首先一个while，就是让head指向第一个不为给定值得地方（前面删了的元素记得delete）；然后一个while循环,条件是当前节点和下一节点都不为空则进入，如果下一个节点和指定值不同，则当前节点往后移，如果下一个节点和指定值相同，则删了下一个节点，指向下下个，当前还是在原地不能动。
+```
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        while(head != NULL && head->val == val){
+            ListNode* tmp = head;
+            head = head->next;
+            delete tmp;
+        }
+        ListNode* cur = head;
+        while(cur != NULL && cur->next != NULL){
+            if(cur->next->val == val){
+                ListNode* tmp = cur->next;
+                cur->next = cur->next->next;
+                delete tmp;
+            }else{
+                cur = cur->next;
+            }
+        }
+        return head;
+    }
+};
+```
+
+
 
 ## 2.k个一组反转链表
 
