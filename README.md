@@ -30,6 +30,31 @@ TODO
 
 ## 3.移除链表元素
 
+虚拟头结点应该是一个更好的方法：首先虚拟一个头结点，它得next为head，也就是它指向head，然后当前节点cur不要是head，而是head之前的那一节点也就是dummy，这样的话它就可以判断头结点的val了，而不需要额外添加逻辑判断。之后就一直遍历当前节点cur，只要cur的下一个不为val，则往后找，下一个是val则删除再指向之后的。这期间虚拟节点始终都在head的前一节点，虽然head节点删除了，但是整条链表没断，因此虚拟节点此时的next就是没删除的第一项，将其赋值给head，然后返回head，就返回了整条删除val后的链表。
+
+```
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        ListNode* dummyHead = new ListNode(0);
+        dummyHead->next = head;
+        ListNode* cur = dummyHead;
+        while(cur->next != NULL){
+            if(cur->next->val == val){
+                ListNode* tmp = cur->next;
+                cur->next = cur->next->next;
+                delete tmp;
+            }else{
+                cur = cur->next;
+            }
+        }
+        head = dummyHead->next;
+        delete dummyHead;
+        return head;
+    }
+};
+```
+
 第一点就是c++需要手动delete节点，就是当移除了指定的链表元素后，delete它。第二点要注意就是特殊情况，整个一个链表都是指定的值或者从头开始是指定的值，那么应当注意的是首先一个while，就是让head指向第一个不为给定值得地方（前面删了的元素记得delete）；然后一个while循环,条件是当前节点和下一节点都不为空则进入，如果下一个节点和指定值不同，则当前节点往后移，如果下一个节点和指定值相同，则删了下一个节点，指向下下个，当前还是在原地不能动。
 ```
 class Solution {
@@ -54,7 +79,6 @@ public:
     }
 };
 ```
-
 
 
 ## 2.k个一组反转链表
