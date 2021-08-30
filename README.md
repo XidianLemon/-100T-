@@ -21,12 +21,39 @@
 
 3.移除链表元素
 
+4.两两交换链表中的节点
+
 ### 三、哈希表
 TODO
 
 ----------
 
 ## 二、链表
+
+
+## 4.两两交换链表中的节点
+
+首先画出图，链表问题必须画图，虚拟头结点必须的。将后面几个节点存下来，我这里就是不知道存谁那就都存，存下来后开始交换，按照cur的next先放，next的next后放，next的next的next最后，则依次将现在的都第一遍前两个都放完了就进行下次循环，直到结束。
+```
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        ListNode* dummyHead = new ListNode(0);
+        dummyHead->next = head;
+        ListNode* cur = dummyHead;
+        while(cur->next != nullptr && cur->next->next != nullptr){
+            ListNode* curNxt = cur->next;
+            ListNode* curNxtNxt = cur->next->next;
+            ListNode* curNxtNxtNxt = cur->next->next->next;
+            cur->next = curNxtNxt;
+            cur->next->next = curNxt;
+            cur->next->next->next = curNxtNxtNxt;
+            cur = cur->next->next;
+        }
+        return dummyHead->next;
+    }
+};
+```
 
 ## 3.移除链表元素
 
