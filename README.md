@@ -23,6 +23,8 @@
 
 4.两两交换链表中的节点
 
+5.删除链表的倒数第N个节点
+
 ### 三、哈希表
 TODO
 
@@ -30,6 +32,32 @@ TODO
 
 ## 二、链表
 
+## 5.删除链表的倒数第N个节点
+
+快慢指针，虚拟头结点。首先快慢都在dummy那，然后让快指针走n个，然后快慢同时走，直到快的的next为null就停止删除此时slow的下一个，令slow指向下下个即完成。
+```
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* dummyHead = new ListNode(0);
+        dummyHead->next = head;
+        ListNode* fast = dummyHead;
+        ListNode* slow = dummyHead;
+        while(n != 0){
+            fast = fast->next;
+            n--;
+        }
+        while(fast->next != NULL){
+            fast = fast->next;
+            slow = slow->next;
+        }
+        ListNode* tmp = slow->next;
+        slow->next = slow->next->next;
+        delete tmp;
+        return dummyHead->next;
+    }
+};
+```
 
 ## 4.两两交换链表中的节点
 
