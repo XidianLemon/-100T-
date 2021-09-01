@@ -25,12 +25,62 @@
 
 5.删除链表的倒数第N个节点
 
+6.链表相交
+
 ### 三、哈希表
 TODO
 
 ----------
 
 ## 二、链表
+
+## 6.链表相交
+
+首先计算两个链表的长度，看谁长，长多少，长多少就让长的那个先走几步。这里为了省事就swap了一下，统一让heada长。然后虚拟头结点分别指向两个链表头结点。长的那个先走几步，到了之后就一起走。直到两个节点的next相等或者其中一个走到null就停。while循环结束后，说明下一个就是相交的节点，直接返回下一个就可以了。
+```
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        int lengthA = 0;
+        int lengthB = 0;
+        ListNode* tempA = new ListNode(0);
+        tempA->next = headA;
+        ListNode* tempB = new ListNode(0);
+        tempB->next = headB;
+        while (tempA->next != NULL) {
+            tempA = tempA->next;
+            lengthA ++;
+        }
+        while (tempB->next != NULL) {
+            tempB = tempB->next;
+            lengthB ++;
+        }
+        
+        //此时(lengthB - lengthA)存的是两个链表之间相差几个
+        //这时应当看谁长，谁长我就让谁先走几步，我统一让第一个链表是长的，
+        if(lengthA < lengthB){
+            swap(lengthA, lengthB);
+            swap(headA, headB);
+        }
+        int diffLengthAB = lengthA - lengthB;
+        ListNode* dummyHeadA = new ListNode(0);
+        dummyHeadA->next = headA;
+        ListNode* dummyHeadB = new ListNode(0);
+        dummyHeadB->next = headB;
+        //虚拟头结点，让第一个链表先走(lengthB - lengthA)
+        while(diffLengthAB != 0){
+            dummyHeadA = dummyHeadA->next;
+            diffLengthAB --;
+        }
+        //两链表同时开始走
+        while(dummyHeadA->next != dummyHeadB->next && dummyHeadA->next != NULL && dummyHeadB->next != NULL){
+            dummyHeadA = dummyHeadA->next;
+            dummyHeadB = dummyHeadB->next;
+        }
+        return dummyHeadB->next;
+    }
+};
+```
 
 ## 5.删除链表的倒数第N个节点
 
