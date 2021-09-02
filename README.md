@@ -27,12 +27,34 @@
 
 6.链表相交
 
+7.环形链表
+
 ### 三、哈希表
 TODO
 
 ----------
 
 ## 二、链表
+
+## 7.环形链表
+
+方法一：哈希表，这题用哈希表最方便，也最好理解。哈希表里存着每一个节点，当找了一圈之后，第一个重复的节点就是环的入口。方法二暂时不准备做，以后再补。
+```
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        unordered_set<ListNode*> uds;
+        while(head != NULL){
+            if(uds.count(head)){
+                return head;
+            }
+            uds.insert(head);
+            head = head->next;
+        }
+        return NULL;
+    }
+};
+```
 
 ## 6.链表相交
 
