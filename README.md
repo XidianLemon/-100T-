@@ -34,9 +34,33 @@
 ### 三、哈希表
 1.有效的字母异位词
 
+2.两个数组的交集
+
 ----------
 
 ## 三、哈希表
+
+## 2.两个数组的交集
+
+使用的是unordered_set，查找这个数字是否在另一个数组出现过，查找是否出现过就用这个stl。先使用一个unordered_set，存第一个数组，遍历第二个数组的每一项，看是否在前面的unordered_set中出现过这个数，出现过的就把这个数放到另一个unordered_set中，注意unordered_set中的元素是不能重复的！这和题目要求输出的是一致的，最终使用vector来存这个unordered_set。
+
+```
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int> result;
+        unordered_set<int> temp(nums1.begin(), nums1.end());
+        for(int num : nums2){
+            if(temp.find(num) != temp.end()){
+                result.insert(num);
+            }
+        }
+        vector<int> resultVec(result.begin(), result.end());
+        return resultVec;
+    }
+};
+```
+
 
 ## 1.有效的字母异位词
 
