@@ -36,9 +36,44 @@
 
 2.两个数组的交集
 
+3.快乐数
+
 ----------
 
 ## 三、哈希表
+
+## 3.快乐数
+
+这道题也要用哈希，原因是如果该数之和一直不为1，则一定会有一个循环的、不为1的数作为所有位相加的和，而只要有和之前一样的数出现了，就不是快乐数。那么使用unordered_set来存和找是否有一样的数。解题的重点部分就在分解这个整数，首先从个位，该数对10取余则得到了个位数，将个位数求平方。然后该数除以10，得到的是不包含个位数的，再对10取余，得到此时的个位数再平方，一直循环到除以10得到0，就将该数每一位都平方后相加了。看得到的数是不是1。然后将该数在unordered_set中找，有的话则说明陷入循环就返回false，没有则insert进去。
+
+```
+class Solution {
+public:
+    int getSum(int n) {
+        int resSum = 0;
+        while (n != 0) {
+            resSum += (n % 10) * (n % 10);
+            n = n / 10;
+        }
+        return resSum;
+    }
+    bool isHappy(int n) {
+        unordered_set<int> resNumSet;
+        while (1) {
+            int numSum = getSum(n);
+            if (numSum == 1) {
+                return true;
+            }
+            if (resNumSet.find(numSum) != resNumSet.end()) {
+                return false;
+            } else {
+                resNumSet.insert(numSum);
+            }
+            n = numSum;
+        }
+    }
+};
+```
 
 ## 2.两个数组的交集
 
