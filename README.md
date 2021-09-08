@@ -38,9 +38,32 @@
 
 3.快乐数
 
+4.两数之和
+
 ----------
 
 ## 三、哈希表
+
+## 4.两数之和
+
+这道题在两年前居然做过，使用的暴力解法，就是两个for循环，没啥意思。卡尔老师讲的使用unordered_map很巧妙。使用target减去当前的数，看是否在unordered_map中出现过，如果出现过则直接返回当前下标和那一项的key。如果没出现过则将当前的下标和数都放进unordered_map中。值得注意的就是使用了auto来接find返回的值，并且用这个auto的对象的second来访问这一项的key。这里是比较陌生的，如果想访问这一项的值就是first。
+
+```
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> numMap;
+        for (int i = 0; i < nums.size(); i ++) {
+            auto iter = numMap.find(target - nums[i]);
+            if (iter != numMap.end()){
+                return {i, iter->second};
+            }
+            numMap.insert(pair<int, int>(nums[i], i));
+        }
+        return {};
+    }
+};
+```
 
 ## 3.快乐数
 
