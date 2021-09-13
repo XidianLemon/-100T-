@@ -42,9 +42,34 @@
 
 5.四数相加 II
 
+6.赎金信
+
 ----------
 
 ## 三、哈希表
+
+## 6.赎金信
+
+这道题跟第一题类似，同样是将每一个字符和'a'相减，得到的数字放到一个int数组中，注意数组长度是26，要在初始化时候指定！将要从中获取的那个string中所有的都放到数组中，放的时候就++，然后取，因为不能重复使用，因此取了就--，如果这一位小于0，说明要从中获取的数组不够，那就直接返回false。
+
+```
+class Solution {
+public:
+    bool canConstruct(string ransomNote, string magazine) {
+        int arr[26] = {0};
+        for (int i = 0;i < magazine.size();i ++) {
+            arr[magazine[i] - 'a'] ++;
+        }
+        for (int i = 0;i < ransomNote.size();i ++){
+            arr[ransomNote[i] - 'a'] --;
+            if(arr[ransomNote[i] - 'a'] < 0){
+                return false;
+            }
+        }
+        return true;
+    }
+};
+```
 
 ## 5.四数相加 II
 
