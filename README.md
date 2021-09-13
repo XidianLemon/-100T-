@@ -40,9 +40,38 @@
 
 4.两数之和
 
+5.四数相加 II
+
 ----------
 
 ## 三、哈希表
+
+## 5.四数相加 II
+
+首先遍历前两个数，将前两个数字的和放入一个unordered_map中，注意！由于unordered_map不可重复，因此两数的和重复的那一位就会+1！！！然后再遍历后两个数，在这个unordered_map中查找0 - (c+d)，注意此时查找，找的是key，而这个值对应的是有几个这个值，因此需要将这一位的值累加上去，比如unordered_map umap，umap[i]对应的值就是有几个这个数。因此要将这个值累加！
+
+```
+class Solution {
+public:
+    int fourSumCount(vector<int>& nums1, vector<int>& nums2, vector<int>& nums3, vector<int>& nums4) {
+        unordered_map<int, int> umap;
+        for (int a : nums1) {
+            for (int b : nums2) {
+                umap[a + b] ++;
+            }
+        }
+        int count = 0;
+        for (int c : nums3) {
+            for (int d : nums4) {
+                if(umap.find(0 - (c + d)) != umap.end()){
+                    count += umap[0 - (c + d)];
+                }
+            }
+        }
+        return count;
+    }
+};
+```
 
 ## 4.两数之和
 
