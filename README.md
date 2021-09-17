@@ -44,9 +44,53 @@
 
 6.赎金信
 
+7.三数之和
+
 ----------
 
 ## 三、哈希表
+
+## 7.三数之和
+
+不想用哈希做容易错还不好理解，就用快慢指针就可以了，首先排序，然后在最外的for循环中去重。相当于固定其中一个，找剩下两数，这两数先从两头找，当找到后一起去重，去重完毕就收缩。
+
+```
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end());
+        for (int i = 0;i < nums.size();i ++) {
+            if (nums[i] > 0) {
+                return res;
+            }
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            int left = i + 1;
+            int right = nums.size() - 1;
+            while(left < right) {
+                if (nums[i] + nums[left] + nums[right] > 0) {
+                    right --;
+                } else if (nums[i] + nums[left] + nums[right]) {
+                    left ++;
+                } else {
+                    res.push_back(vector<int>{nums[i], nums[left], nums[right]});
+                    while (left < right && nums[left] == nums[left + 1]) {
+                        left ++;
+                    }
+                    while (left < right && nums[right] == nums[right - 1]) {
+                        right --;
+                    }
+                    left ++;
+                    right --;
+                }
+            }
+        }
+        return res;
+    }
+};
+```
 
 ## 6.赎金信
 
