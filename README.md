@@ -46,6 +46,22 @@
 
 7.三数之和
 
+### 四、字符串
+1.反转字符串
+双指针比较好，也不用引入额外空间，头尾交换，一起收缩，到中间就停。
+
+```
+class Solution {
+public:
+    void reverseString(vector<char>& s) {
+        for (int i = 0, j = s.size() - 1;i < s.size() / 2;i ++, j --) {
+            swap(s[i], s[j]);
+        }
+    }
+};
+```
+
+
 ----------
 
 ## 三、哈希表
