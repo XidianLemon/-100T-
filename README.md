@@ -53,7 +53,6 @@
 
 3.替换空格
 
-
 ----------
 
 ## 四、字符串
@@ -95,6 +94,37 @@ public:
 
 ## 3.替换空格
 
+首先数空格的个数，然后声明一个新的字符串，给该字符串定长度：原字符串长度+空格个数乘以2。从后往前遍历，若遇到空格则将新字符串的三位替换为%20，不遇到空格则一直将原字符串的字符放到新字符串中。长度最好用length()。
+
+```
+class Solution {
+public:
+    string replaceSpace(string s) {
+        string resStr;
+        int countSpace = 0;
+        for (int i = 0;i < s.length();i ++) {
+            if (s[i] == ' ') {
+                countSpace ++;
+            }
+        }
+        resStr.resize(countSpace * 2 + s.length());
+        int sSize = s.length() - 1;
+        int resSize = resStr.length() - 1;
+        for (int i = sSize, j = resSize;i >= 0;i --, j --) {
+            if (s[i] == ' ') {
+                resStr[j] = '0';
+                resStr[j - 1] = '2';
+                resStr[j - 2] = '%';
+                j = j - 2;
+            } else {
+                resStr[j] = s[i];
+            }
+        }
+        return resStr;
+    }
+};
+
+```
 
 
 ----------
