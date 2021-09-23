@@ -53,44 +53,75 @@
 
 3.替换空格
 
+4.翻转字符串里的单词
+
 ----------
 
 ## 四、字符串
 
-## 1.反转字符串
-
-双指针比较好，也不用引入额外空间，头尾交换，一起收缩，到中间就停。
-
-```
-class Solution {
-public:
-    void reverseString(vector<char>& s) {
-        for (int i = 0, j = s.size() - 1;i < s.size() / 2;i ++, j --) {
-            swap(s[i], s[j]);
-        }
-    }
-};
-```
-
-## 2.反转字符串II
-
-这题的题目表达很差，转换成好理解的话，就是每隔k个，就反转k个，不足k个就都翻转。知道了这个就简单了，每隔k个，那就是for循环的时候+2k，在for循环中判断当前项是否不足k个了，不足k个就当前到最后都翻转，多于k个就翻转k个。
+## 4.翻转字符串里的单词
+这道题有几个步骤，注意不要数组越界！这几个步骤感觉不用分顺序，去掉字符串中的重复空格；去掉头部的空格，去掉尾部空格，翻转整个串，翻转每个单词。使用api的时候要特别注意，reverse第一个参数是要翻转的第一位，第二个参数是要翻转的最后一位的下一位哦！！！erase第一个参数是从第几位开始翻转，第二个参数是翻转几位。最后当你删除了第I项的空格，需要记得I--，否则就会少删一位空格哦！
 
 ```
 class Solution {
 public:
-    string reverseStr(string s, int k) {
-        for (int i = 0;i < s.length();i = i + 2*k) {
-            if (s.length() - i < k) {
-                reverse(s.begin() + i, s.end());
-            } else {
-                reverse(s.begin() + i, s.begin() + i + k);
+    string reverseWords(string s) {
+
+        //首先翻转整个字符串
+        reverse(s.begin(), s.end());
+
+        //将这个字符串中每个单词翻转
+        for (int i = 0;i < s.length();i ++) {
+            //找不是空格那一位
+            while (i < s.length() && s[i] == ' ') {
+                i ++;
             }
+            //当i超过了数组长度时，则break
+            if (i == s.length()) {
+                break;
+            }
+            //此时i指向的是那个单词
+            int wordStartIndex = i; //start指的是单词开头的索引
+            
+
+            //找单词结束的位置
+            while (i < s.length() && s[i] != ' ') {
+                i ++;
+            }
+            // if (i == s.length()) {
+            //     i 
+            // }
+            int wordEndIndex = i;   //end指的是单词结束后，第一个空格的索引
+
+            //翻转这个单词
+            reverse(s.begin() + wordStartIndex, s.begin() + wordEndIndex);
+
+        }
+
+        //去掉重复空格
+        for (int i = 0;i < s.length();i ++) {
+            
+            if (i > 0 && s[i] == s[i - 1] && s[i] == ' ') {
+                s.erase(i - 1, 1);
+                i --;
+            }
+        }
+
+        //去掉开头处空格
+        if (s[0] == ' ') {
+            s.erase(0, 1);
+        }
+
+        //去掉结尾处空格
+        if (s[s.length() - 1] == ' '){
+            s.erase(s.length() - 1, 1);
         }
         return s;
     }
 };
 ```
+
+
 
 ## 3.替换空格
 
@@ -126,6 +157,40 @@ public:
 
 ```
 
+## 2.反转字符串II
+
+这题的题目表达很差，转换成好理解的话，就是每隔k个，就反转k个，不足k个就都翻转。知道了这个就简单了，每隔k个，那就是for循环的时候+2k，在for循环中判断当前项是否不足k个了，不足k个就当前到最后都翻转，多于k个就翻转k个。
+
+```
+class Solution {
+public:
+    string reverseStr(string s, int k) {
+        for (int i = 0;i < s.length();i = i + 2*k) {
+            if (s.length() - i < k) {
+                reverse(s.begin() + i, s.end());
+            } else {
+                reverse(s.begin() + i, s.begin() + i + k);
+            }
+        }
+        return s;
+    }
+};
+```
+
+## 1.反转字符串
+
+双指针比较好，也不用引入额外空间，头尾交换，一起收缩，到中间就停。
+
+```
+class Solution {
+public:
+    void reverseString(vector<char>& s) {
+        for (int i = 0, j = s.size() - 1;i < s.size() / 2;i ++, j --) {
+            swap(s[i], s[j]);
+        }
+    }
+};
+```
 
 ----------
 
