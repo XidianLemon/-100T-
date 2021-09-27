@@ -57,6 +57,53 @@
 
 5.左旋转字符串
 
+### 五、栈与队列
+1.用栈实现队列
+
+----------
+
+## 五、栈与队列
+
+## 1.用栈实现队列
+push就是push，删除的话首先判断out栈是否为空，不为空则直接删，为空则先将in栈所有的都依次放到out栈中，再删。peek取也是和pop一样的，只是记得删完再放回去。空则判断这两个栈是否都为空。
+
+```
+class MyQueue {
+public:
+    stack<int> stackOut;
+    stack<int> stackIn;
+    MyQueue() {
+
+    }
+    
+    void push(int x) {
+        stackIn.push(x);
+    }
+    
+    int pop() {
+        if (stackOut.empty()) {
+            while (!stackIn.empty()) {
+                stackOut.push(stackIn.top());
+                stackIn.pop();
+            }
+        }
+        int result = stackOut.top();
+        stackOut.pop();
+        return result;
+    }
+    
+    int peek() {
+        int result = this->pop();
+        stackOut.push(result);
+        return result;
+    }
+    
+    bool empty() {
+        return stackOut.empty() && stackIn.empty();
+    }
+};
+```
+
 ----------
 
 ## 四、字符串
