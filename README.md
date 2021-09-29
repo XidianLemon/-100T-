@@ -60,9 +60,54 @@
 ### 五、栈与队列
 1.用栈实现队列
 
+2.用队列实现栈
+
+
 ----------
 
 ## 五、栈与队列
+
+## 2.用队列实现栈
+这道题pop比较麻烦，别的都正常用就可以了。同样两个队列，pop实现过程：队列1的元素依次放到队列2中，留下最后一个，然后删除这个，再把队列2中所有的元素放到队列1中，清空队列2。有了思路就好写了。
+
+```
+class MyStack {
+public:
+    queue<int> que1;
+    queue<int> que2;
+    MyStack() {
+
+    }
+    
+    void push(int x) {
+        que1.push(x);
+    }
+    
+    int pop() {
+        int size = que1.size();
+        while (size != 1) {
+            que2.push(que1.front());
+            que1.pop();
+            size --;
+        }
+        int result = que1.front();
+        que1.pop();
+        while (!que2.empty()) {
+            que1.push(que2.front());
+            que2.pop();
+        }
+        return result;
+    }
+    
+    int top() {
+        return que1.back();
+    }
+    
+    bool empty() {
+        return que1.empty();
+    }
+};
+```
 
 ## 1.用栈实现队列
 push就是push，删除的话首先判断out栈是否为空，不为空则直接删，为空则先将in栈所有的都依次放到out栈中，再删。peek取也是和pop一样的，只是记得删完再放回去。空则判断这两个栈是否都为空。
