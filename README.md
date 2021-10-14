@@ -66,9 +66,46 @@
 
 4.删除字符串中的所有相邻重复项
 
+5.逆波兰表达式求值
+
 ----------
 
 ## 五、栈与队列
+
+## 5.逆波兰表达式求值
+这道题最适合就是栈，给定的字符串，一项一项找，找到数字就放进栈，找到操作符就让栈顶的两个元素根据操作符相加，记得把栈顶元素删除，然后再把计算得到的数字再放回栈中。值得注意的是栈顶和栈顶第二个，哪个是放在操作符前，哪个是操作符后。然后减完记得转int，因为之前是字符转的。栈是int，返回也是int。最终直接返回栈顶的计算结果就行了。
+
+```
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+        stack<int> st;
+        for (int i = 0;i < tokens.size();i ++) {
+            if (tokens[i] == "+" || tokens[i] == "-" || tokens[i] == "*" || tokens[i] == "/") {
+                int num1 = st.top();
+                st.pop();
+                int num2 = st.top();
+                st.pop();
+                if (tokens[i] == "+") {
+                    st.push(num2 + num1);
+                }
+                if (tokens[i] == "-") {
+                    st.push(num2 - num1);
+                }
+                if (tokens[i] == "*") {
+                    st.push(num2 * num1);
+                }
+                if (tokens[i] == "/") {
+                    st.push(num2 / num1);
+                }
+            } else {
+                st.push(stoi(tokens[i]));
+            }
+        }
+        return st.top();
+    }
+};
+```
 
 ## 4.删除字符串中的所有相邻重复项
 使用一个辅助字符串，判断原字符串的第i项 跟辅助串最后一项是否相同，相同就删了，不同就放进辅助串。最后返回辅助串就可以了。
