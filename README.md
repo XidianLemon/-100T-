@@ -68,9 +68,57 @@
 
 5.逆波兰表达式求值
 
+6.滑动窗口最大值
+
 ----------
 
 ## 五、栈与队列
+
+## 6.滑动窗口最大值
+这道题按照暴力的方法好做，但是提交会超时。降低时间复杂度，就需要想策略。需要一个结构，该结构的头是最大的数，当我往该结构放的时候（也就是滑窗往右移动的时候），如果放的数比前面的数大，就把前面的数都删了，直到放的数比前面的小或者都删干净了为止。然后再放到该结构中。我要删除，也就是当滑窗往右移动的时候，删除也判断，删除的数是不是正好处在该结构的头上，不在该结构的头上，就不删除。因为他是目前已知最大的，而且不出滑窗，则不要删除。
+
+先将前k个依次push到该结构中，然后将此时该结构的头放进结果。然后从第k个开始向后遍历，每一个都是先删除操作，删除的就是第i-k那一项，然后push操作，push就是第i项。然后将该结构的头放进结果中。
+最后返回结果就可以了。
+
+```
+class Solution {
+public:
+    deque<int> myDeque;
+
+    //删除的正好是头上那个，我才删
+    void pop(int popNum) {
+        if (!myDeque.empty() && myDeque.front() == popNum) {
+            myDeque.pop_front();
+        }
+    }
+
+    void push(int pushNum) {
+        while (!myDeque.empty() && pushNum > myDeque.back()) {
+            myDeque.pop_back();
+        }
+        myDeque.push_back(pushNum);
+    }
+
+    int front() {
+        return myDeque.front();
+    }
+
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        for (int i = 0;i < k;i ++) {
+            this->push(nums[i]);
+        }
+        vector<int> result;
+        result.push_back(this->front());
+
+        for (int i = k;i < nums.size();i ++) {
+            this->pop(nums[i - k]);
+            this->push(nums[i]);
+            result.push_back(this->front());
+        }
+        return result;
+    }
+};
+```
 
 ## 5.逆波兰表达式求值
 这道题最适合就是栈，给定的字符串，一项一项找，找到数字就放进栈，找到操作符就让栈顶的两个元素根据操作符相加，记得把栈顶元素删除，然后再把计算得到的数字再放回栈中。值得注意的是栈顶和栈顶第二个，哪个是放在操作符前，哪个是操作符后。然后减完记得转int，因为之前是字符转的。栈是int，返回也是int。最终直接返回栈顶的计算结果就行了。
