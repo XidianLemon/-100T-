@@ -70,9 +70,44 @@
 
 6.滑动窗口最大值
 
+7.前 K 个高频元素
+
 ----------
 
 ## 五、栈与队列
+
+## 7.前 K 个高频元素
+首先使用纯哈希的方法，优先级队列暂时我没看懂，等看懂后再用优先级队列。
+
+方法1，纯哈希，首先将数组中的数放入哈希，first应当是数，second应当是频率。然后再将哈希放入一个二维数组中，注意该数组应当pair<int, int>，此时应当注意的是应该频率放到第一个，而数放到第二个。将该数组排序，那么排序的也就是频率。将频率排序完毕后，输出前k个，注意输出的是每一项的second。上述每一个注意都需要重点注意first和second！
+
+```
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> myMap;
+        vector<pair<int, int>> myVec;
+        for (auto i : nums) {
+            myMap[i] ++;
+        }
+        // myMap此时first存着是数，second存着是频率
+        for (auto it = myMap.begin(); it != myMap.end(); it++) {
+            myVec.push_back({it->second, it->first});
+        }
+        // myVec此时first存着是频率，second存的是数
+        sort(myVec.rbegin(), myVec.rend());
+        // myVec此时由大到小排序好了
+        vector<int> result;
+        for (int i = 0; i < k; i++) {
+            result.push_back(myVec[i].second);
+        }
+        return result;
+    }
+};
+```
+
+方法2，优先级队列
+
 
 ## 6.滑动窗口最大值
 这道题按照暴力的方法好做，但是提交会超时。降低时间复杂度，就需要想策略。需要一个结构，该结构的头是最大的数，当我往该结构放的时候（也就是滑窗往右移动的时候），如果放的数比前面的数大，就把前面的数都删了，直到放的数比前面的小或者都删干净了为止。然后再放到该结构中。我要删除，也就是当滑窗往右移动的时候，删除也判断，删除的数是不是正好处在该结构的头上，不在该结构的头上，就不删除。因为他是目前已知最大的，而且不出滑窗，则不要删除。
