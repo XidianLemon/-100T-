@@ -108,6 +108,39 @@ public:
 
 方法2，优先级队列
 
+优先级队列在这里就是用在了大顶堆和小顶堆上，大小顶堆的固定写法就是如下题中的，当push进去后，小顶堆固定的就是将小的排前面，大的放后面，而它可以当做队列来操作。本题首先实现一个小顶堆，然后将所有数的频率放到哈希表里。之后声明一个小顶堆，也就是优先级队列，以更小的数为优先。然后将哈希中的每一项都放入优先级队列中，当放入的时候，该优先级队列会自动的将放入的数以更小的优先放进去。那么当该优先级队列的size超过了k时，我就删除队头的元素，那么遍历完哈希表后，该优先级队列也就存下来了k个大的数。最后将该优先级队列的所有数都放到结果的vector中，就可以了，需要注意的就是放的时候需要先声明vector的长度，即vector<int> result(k)。然后放的时候也是result[i] = 队列.top().first。放完就删了队头元素。
+
+```
+class Solution {
+public:
+    class smallT {
+    public:
+        bool operator() (const pair<int, int>& lh, const pair<int, int>& rh) {
+            return lh.second > rh.second;
+        }
+    };
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> myMap;
+        for (int i = 0; i < nums.size(); i++) {
+            myMap[nums[i]] ++;
+        }
+        priority_queue<pair<int, int>, vector<pair<int, int>>, smallT> myQue;
+        for (unordered_map<int, int>::iterator it = myMap.begin(); it != myMap.end(); it++) {
+            myQue.push(*it);
+            if (myQue.size() > k) {
+                myQue.pop();
+            }
+        }
+        vector<int> result(k);
+        for (int i = 0; i < k; i++) {
+            result[i] = myQue.top().first;
+            myQue.pop();
+        }
+        return result;
+    }
+};
+```
+
 
 ## 6.滑动窗口最大值
 这道题按照暴力的方法好做，但是提交会超时。降低时间复杂度，就需要想策略。需要一个结构，该结构的头是最大的数，当我往该结构放的时候（也就是滑窗往右移动的时候），如果放的数比前面的数大，就把前面的数都删了，直到放的数比前面的小或者都删干净了为止。然后再放到该结构中。我要删除，也就是当滑窗往右移动的时候，删除也判断，删除的数是不是正好处在该结构的头上，不在该结构的头上，就不删除。因为他是目前已知最大的，而且不出滑窗，则不要删除。
