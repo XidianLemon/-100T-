@@ -46,6 +46,8 @@
 
 7.三数之和
 
+8.四数之和
+
 ### 四、字符串
 1.反转字符串
 
@@ -507,6 +509,51 @@ public:
 
 ## 三、哈希表
 
+## 8.四数之和
+
+这道题和三数之和类似，值得注意的点在于本题的四数之和是一个随机数，而三数之和是0，因此在每次循环开始的地方就不能判断如果超过target就返回了。三数之和只需要定一个数，左右两个数，四数之和定两个数，因此就需要两层for循环，并且每层for循环在最开始的地方去重。其他的就和三数之和一样了，当左小于右，就一直往中间找，看是大了还是小了，就往中间缩，直到左大于等于右。还有需要注意的是四数之和与target比较大小时，不等号左边就保留两个数的和，右边是target - 另外两个数的和，否则就会出现四数之和超过了int的最大值，执行出错！
+                                                     
+```
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> result;
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < nums.size(); i ++) {
+            if (i > 0 && nums[i] == nums[i-1]) {
+                continue;
+            }
+            for (int j = i+1; j < nums.size(); j ++) {
+                if (j > i+1 && nums[j] == nums[j-1]) {
+                    continue;
+                }
+                int left = j + 1;
+                int right = nums.size() - 1;
+
+                while (left < right) {
+                    if (nums[i] + nums[j] < target - nums[left] - nums[right]) {
+                        left ++;
+                    } else if (nums[i] + nums[j] > target - nums[left] - nums[right]) {
+                        right --;
+                    } else {
+                        result.push_back({nums[i], nums[j], nums[left], nums[right]});
+                        while (left < right && nums[left] == nums[left + 1]) {
+                            left++;
+                        }
+                        while (left < right && nums[right] == nums[right - 1]) {
+                            right--;
+                        }
+                        left ++;
+                        right --;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+};
+```
+                                                     
 ## 7.三数之和
 
 不想用哈希做容易错还不好理解，就用快慢指针就可以了，首先排序，然后在最外的for循环中去重。相当于固定其中一个，找剩下两数，这两数先从两头找，当找到后一起去重，去重完毕就收缩。
