@@ -61,6 +61,8 @@
 
 6.实现 strStr()
 
+7.重复的子字符串
+
 ### 五、栈与队列
 1.用栈实现队列
 
@@ -379,6 +381,41 @@ public:
 ----------
 
 ## 四、字符串
+
+## 7.重复的子字符串
+
+kmp获取next数组，传入的字符串就是要判断的字符串。该字符串如果存在重复的子字符串，那么一定它的next数组一定会有这个性质：最后一位大于0，且字符串长度 % （字符串长度 - next数组最后一位） == 0，那么获得next数组后，就判断是否有这个性质，有就返回true。
+
+```
+class Solution {
+public:
+    void getNext(int* next, const string& s) {
+        int j = 0;
+        next[0] = 0;
+        for (int i = 1; i < s.size(); i ++) {
+            while (j > 0 && s[i] != s[j]) {
+                j = next[j - 1];
+            }
+            if (s[i] == s[j]) {
+                j++;
+            }
+            next[i] = j;
+        }
+    }
+    bool repeatedSubstringPattern(string s) {
+        if (s.size() == 0) {
+            return false;
+        }
+        int next[s.size()];
+        int len = s.size();
+        getNext(next, s);
+        if (next[len - 1] > 0 && (len % (len - next[len - 1]) == 0)) {
+            return true;
+        }
+        return false;
+    }
+};
+```
 
 ## 6.实现 strStr()
 
