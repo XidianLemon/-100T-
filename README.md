@@ -89,9 +89,83 @@
 
 2.反转字符串
 
+3.替换空格
+
+4.翻转字符串里的单词
+
 ----------
 
 ## 六、双指针法
+
+## 4.翻转字符串里的单词
+不能用erase删除冗余空格，因为erase本身时间复杂度就是n，再放到for循环中时间复杂度就是n的平方。因此移除冗余空格就是一个子问题，首先应该移除开头的空格，然后移除中间的冗余空格，最后移除最后的空格。而且不能使用erase库函数。这样就用到了双指针删除指定元素的那道题的思想，如果等于值就只动快的，不等于就快的赋值给慢的，然后一起动。但是这里有一个问题，当删除完如果最后一个字符是空格则没有删除，那么最后还要判断是否移除了空格，移除了就resize慢指针当前所指的位，没有移除就resize慢指针的前一位。
+
+然后我将所有的字符串reverse，然后再将其中每一个字符串reverse，同样的，不要调库函数，使用swap反转。
+
+然后在整个字符串中找到每一个单词，再让每一个单词反转。
+
+```
+class Solution {
+public:
+    void reverse(string& s, int start, int end) {
+        for (int i = start, j = end; i < j; i++, j--) {
+            swap(s[i], s[j]);
+        }
+    }
+    void removeSpace(string& s) {
+        int fast = 0;
+        //删除前面的冗余空格
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] != ' ') {
+                break;
+            }
+            fast++;
+        }
+        //至此fast存着第一个不为空格的字符
+
+        //删除中间冗余空格
+        //happy  
+        int slow = 0;
+        for (; fast < s.size(); fast++) {
+            if (fast - 1 > 0 && s[fast] == s[fast - 1] && s[fast] == ' ') {
+                continue;
+            } else {
+                s[slow] = s[fast];
+                slow++;
+            }
+        }
+        //至此slow存着最后一个字符的后一项，slow-1存着最后一个字符，此时s只可能在最后一位存在一个空格
+
+        //删除最后的冗余空格
+        if (slow - 1 > 0 && s[slow - 1] == ' ') {
+            s.resize(slow - 1);
+        } else {
+            s.resize(slow);
+        }
+            
+    }
+    string reverseWords(string s) {
+        removeSpace(s);
+        reverse(s, 0, s.size() - 1);
+        for (int i = 0; i < s.size(); i++) {
+            int j = i;
+            while (j < s.size() && s[j] != ' ') {
+                j++;
+            }
+            reverse(s, i, j - 1);
+            i = j;
+        }
+        return s;
+    }
+};
+```
+
+----------
+
+## 3.替换空格
+
+
+----------
 
 ## 2.反转字符串
 双指针，一个指向开头，一个指向结尾，同时往中间靠，直到相遇，每次都swap。
