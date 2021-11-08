@@ -163,7 +163,37 @@ public:
 ----------
 
 ## 3.替换空格
+首先需要找出字符串里有多少空格。然后计算替换后的总空格数量为原字符串长度+2倍的空格数量。这之后一定要注意的是记得将原空格resize，新的长度，否则就会出现问题。将字符串按照从后往前遍历，同样双指针，一个是从老的字符串长度，一个是从新的字符串长度。如果遇到空格则将这一项替换为0，这一项前一项替换为2，再前一项替换为%，直到第0项。
 
+```
+class Solution {
+public:
+    string replaceSpace(string s) {
+        int countSpace = 0;
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] == ' ') {
+                countSpace++;
+            }
+        }
+        int newSize = s.size() + 2 * countSpace;
+        int oldSize = s.size();
+        cout<<"newsize = " << newSize<<endl;
+        cout<<"oldSize = " << oldSize<<endl;
+        s.resize(newSize);
+        for (int i = oldSize - 1, j = newSize - 1; i >= 0; i--, j--) {
+            if (s[i] == ' ') {
+                s[j] = '0';
+                s[j - 1] = '2';
+                s[j - 2] = '%';
+                j = j - 2;
+            } else {
+                s[j] = s[i];
+            }
+        }
+        return s;
+    }
+};
+```
 
 ----------
 
