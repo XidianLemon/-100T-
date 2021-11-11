@@ -95,9 +95,68 @@
 
 5.反转链表
 
+6.删除链表的倒数第 N 个结点
+
 ----------
 
 ## 六、双指针法
+
+
+## 6.删除链表的倒数第 N 个结点
+本题方法1就是让一个节点走到要删除的前一个，然后让这个节点指向要删除的后一个。那么由于题目给的是倒数第n个节点，因此我们应当首先计算出链表长度，然后再让节点走到前一个。
+
+```
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* dummy = new ListNode(0);
+        dummy->next = head;
+        ListNode* tempListnode = dummy;
+        int size = -1;
+        while (tempListnode != nullptr) {
+            tempListnode = tempListnode->next;
+            size++;
+        }
+        ListNode* tempLn = dummy;
+        int temp2 = size - n;
+        while (temp2 != 0) {
+            tempLn = tempLn->next;
+            temp2--;
+        }
+
+        tempLn->next = tempLn->next->next;
+        return dummy->next;
+    }
+};
+```
+
+方法2，这种删除的问题都是要定义虚拟头结点，虚拟头结点在这里指向head。fast和slow都等于dummy，然后让fast先走n+1步，也就是走到第n个后面，然后一块走，直到fast走到外面就停止，这时slow正好在倒数第n个前面，删除就可以了。最后返回dummy的next。
+
+```
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* dummy = new ListNode(0);
+        dummy->next = head;
+        ListNode* fast = dummy;
+        ListNode* slow = dummy;
+        while (n != 0 && fast != nullptr) {
+            n--;
+            fast = fast->next;
+        }
+        fast = fast->next;
+        while (fast != nullptr) {
+            fast = fast->next;
+            slow = slow->next;
+        }
+        slow->next = slow->next->next;
+        return dummy->next;
+    }
+};
+```
+
+
+----------
 
 ## 5.反转链表
 双指针，一个指向链表的前一个，一个指向当前的，前一个在初始化时候指向null，当前的在初始化时候指向head，然后每次反转，pre和cur就一起往后移动，直到cur移出去了，也就是指向null，就结束，返回pre。
@@ -118,6 +177,8 @@ public:
     }
 };
 ```
+
+----------
 
 ## 4.翻转字符串里的单词
 不能用erase删除冗余空格，因为erase本身时间复杂度就是n，再放到for循环中时间复杂度就是n的平方。因此移除冗余空格就是一个子问题，首先应该移除开头的空格，然后移除中间的冗余空格，最后移除最后的空格。而且不能使用erase库函数。这样就用到了双指针删除指定元素的那道题的思想，如果等于值就只动快的，不等于就快的赋值给慢的，然后一起动。但是这里有一个问题，当删除完如果最后一个字符是空格则没有删除，那么最后还要判断是否移除了空格，移除了就resize慢指针当前所指的位，没有移除就resize慢指针的前一位。
