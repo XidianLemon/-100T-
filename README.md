@@ -97,9 +97,70 @@
 
 6.删除链表的倒数第 N 个结点
 
+7.链表相交
+
 ----------
 
 ## 六、双指针法
+
+
+
+----------
+
+## 7.链表相交
+首先计算两链表长度，然后让长的那个统一为a链表，长的减去短的，让长的先走这个差距，然后两个一起走，其中一个不为空则就一直走，直到遇见相等的就返回。
+
+```
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+
+        //求a的长度
+        ListNode* tempLNA = headA;
+        int lenA = 0;
+        while (tempLNA != NULL) {
+            lenA++;
+            tempLNA = tempLNA->next;
+        }
+        
+        //求b的长度
+        ListNode* tempLNB = headB;
+        int lenB = 0;
+        while (tempLNB != NULL) {
+            lenB++;
+            tempLNB = tempLNB->next;
+        }
+
+        if (lenA < lenB) {
+            swap(lenA, lenB);
+            swap(headA, headB);
+        }
+        //保证a始终最长
+
+        ListNode* curA = headA;
+        ListNode* curB = headB;
+
+        //让a先走差的那么多步
+        int diff = lenA - lenB;
+        while (diff != 0) {
+            diff--;
+            curA = curA->next;
+        }
+
+        while (curA != NULL) {
+            if (curA == curB) {
+                return curA;
+            }
+            curA = curA->next;
+            curB = curB->next;
+        }
+        return NULL;
+    }
+};
+```
+
+
+----------
 
 
 ## 6.删除链表的倒数第 N 个结点
