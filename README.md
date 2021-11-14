@@ -99,11 +99,50 @@
 
 7.链表相交
 
+8.环形链表 II
+
 ----------
 
 ## 六、双指针法
 
 
+## 8.环形链表 II
+一上来应当先判断链表是否只有一个节点或者一个节点都没有，那么直接返回null。然后定义一个快慢指针，快的指针一次走两个，慢的指针一次走一个，直到相遇，就break，如果没有相遇说明没有环，则返回null。此时快指针在相遇的地方，我让慢指针回到head，然后同时走，相遇的地方就是环的入口。
+
+```
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        if (head == NULL || head->next == NULL) {
+            return NULL;
+        }
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (fast != NULL && fast->next != NULL) {
+            slow = slow->next;
+            fast = fast->next->next;
+            if (slow == fast) {
+                break;
+            }
+        }
+        //meetIndex存着相遇的位置
+
+        //没相遇说明没环
+        if (slow != fast) {
+            return NULL;
+        }
+
+        //让slow从头开始走，fast接着走
+        slow = head;
+        while (slow != fast) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+
+        return fast;
+    }
+};-
+```
 
 ----------
 
