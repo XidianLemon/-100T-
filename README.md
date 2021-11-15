@@ -101,10 +101,57 @@
 
 8.环形链表 II
 
+9.三数之和
+
 ----------
 
 ## 六、双指针法
 
+
+## 9.三数之和
+先排序，进入循环，固定一个，先判断这一个是否大于0，如果大于0直接返回结果，然后剩余那两个一个在固定的那个后面，一个在最后。看和不为0就往中间靠，为0就放进去。然后先去重，再收缩，注意去重要用while不是if。收缩完毕接着看和，直到左大于等于右。这一次的就结束。
+
+```
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> result;
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] > 0) {
+                return result;
+            }
+
+            if (i > 0 && nums[i - 1] == nums[i]) {
+                continue;
+            }
+
+            int left = i + 1;
+            int right = nums.size() - 1;
+            while (left < right) {
+                if (0 - nums[i] < nums[left] + nums[right]) {
+                    right--;
+                } else if (0 - nums[i] > nums[left] + nums[right]) {
+                    left++;
+                } else {
+                    result.push_back({nums[i], nums[left], nums[right]});
+                    while (left < right && nums[left] == nums[left + 1]) {
+                        left++;
+                    }
+                    while (left < right && nums[right] == nums[right - 1]) {
+                        right--;
+                    }
+                    left++;
+                    right--;
+                }
+            }
+        }
+        return result;
+    }
+};
+```
+
+----------
 
 ## 8.环形链表 II
 一上来应当先判断链表是否只有一个节点或者一个节点都没有，那么直接返回null。然后定义一个快慢指针，快的指针一次走两个，慢的指针一次走一个，直到相遇，就break，如果没有相遇说明没有环，则返回null。此时快指针在相遇的地方，我让慢指针回到head，然后同时走，相遇的地方就是环的入口。
