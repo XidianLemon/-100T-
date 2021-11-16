@@ -103,10 +103,56 @@
 
 9.三数之和
 
+10.四数之和
+
 ----------
 
 ## 六、双指针法
 
+## 10.四数之和
+先排序，进入循环，先判断该数和上一个是不是一样，去重，然后再进入循环，判断该数是不是和上一个一样，去重。这样固定了两个数，接着找左右指针，一个在固定的那个的后面，一个在最后，和为target就放进去，然后先去重，再收缩，其他的操作和三数之和完全一样。
+
+```
+class Solution {
+public:
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> result;
+        for (int i = 0; i < nums.size(); i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            for (int j = i + 1; j < nums.size(); j++) {
+                if (j > i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+                int left = j + 1;
+                int right = nums.size() - 1;
+                while (left < right) {
+                    if (target - nums[i] - nums[j] > nums[left] + nums[right]) {
+                        left++;
+                    } else if (target - nums[i] - nums[j] < nums[left] + nums[right]) {
+                        right--;
+                    } else {
+                        result.push_back({nums[i], nums[j], nums[left], nums[right]});
+                        while (left < right && nums[left] == nums[left + 1]) {
+                            left++;
+                        }
+                        while (left < right && nums[right] == nums[right - 1]) {
+                            right--;
+                        }
+                        left++;
+                        right--;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+};
+```
+
+----------
 
 ## 9.三数之和
 先排序，进入循环，固定一个，先判断这一个是否大于0，如果大于0直接返回结果，然后剩余那两个一个在固定的那个后面，一个在最后。看和不为0就往中间靠，为0就放进去。然后先去重，再收缩，注意去重要用while不是if。收缩完毕接着看和，直到左大于等于右。这一次的就结束。
