@@ -107,6 +107,42 @@
 
 双指针总结
 
+### 七、二叉树
+1.二叉树的递归遍历
+
+----------
+
+## 七、二叉树
+
+1.二叉树的递归遍历
+
+递归解法：递归要注意三点：1.确定参数和返回值；2.确定终止条件；3.确定单层递归逻辑，那么以前序遍历为例，参数就是节点和要返回的那个结果vector，终止条件就是当前遍历节点为空则返回，单层递归逻辑前序就是将节点的值放入。这里背诵的技巧就是前序遍历就是将中节点的值放vec放在前，中序遍历就放中，后序就放后。
+
+```
+class Solution {
+public:
+    void traversal(TreeNode* cur, vector<int>& vec) {
+        if (cur == nullptr) {
+            return;
+        }
+        //vec.push_back(cur->val);前
+        traversal(cur->left, vec);
+        //vec.push_back(cur->val);中
+        traversal(cur->right, vec);
+        //vec.push_back(cur->val);后
+    }
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> result;
+        traversal(root, result);
+        return result;
+    }
+};
+```
+
+
+
+迭代解法
+
 ----------
 
 ## 六、双指针法
