@@ -110,13 +110,15 @@
 ### 七、二叉树
 1.二叉树的递归遍历
 
+2.二叉树的迭代遍历
+
 ----------
 
 ## 七、二叉树
 
-1.二叉树的递归遍历
+## 1.二叉树的递归遍历
 
-递归解法：递归要注意三点：1.确定参数和返回值；2.确定终止条件；3.确定单层递归逻辑，那么以前序遍历为例，参数就是节点和要返回的那个结果vector，终止条件就是当前遍历节点为空则返回，单层递归逻辑前序就是将节点的值放入。这里背诵的技巧就是前序遍历就是将中节点的值放vec放在前，中序遍历就放中，后序就放后。
+递归要注意三点：1.确定参数和返回值；2.确定终止条件；3.确定单层递归逻辑，那么以前序遍历为例，参数就是节点和要返回的那个结果vector，终止条件就是当前遍历节点为空则返回，单层递归逻辑前序就是将节点的值放入。这里背诵的技巧就是前序遍历就是将中节点的值放vec放在前，中序遍历就放中，后序就放后。
 
 ```
 class Solution {
@@ -139,9 +141,88 @@ public:
 };
 ```
 
+----------
 
+## 2.二叉树的迭代遍历
 
-迭代解法
+前序遍历和后序遍历类似，都是操作栈。首先说前序遍历，将头结点放入栈中，然后进入循环，直接将栈顶的值放到最终结果。接着用一个节点存栈顶元素，再栈顶删除，注意此时先判断这个节点（存下来的栈顶）的右是否为空，不为空就入栈，后判断这个节点的左是否为空，不为空就入栈，一定要注意此时的顺序。栈不为空就一直循环。
+
+```
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> result;
+        if (root == nullptr) {
+            return result;
+        }
+        stack<TreeNode*> st;
+        st.push(root);
+        while (!st.empty()) {
+            TreeNode* node = st.top();
+            st.pop();
+            result.push_back(node->val);
+            if (node->right) st.push(node->right);
+            if (node->left) st.push(node->left);
+        }
+        return result;
+    }
+};
+```
+
+后序遍历前面过程一样，将头结点放入栈中，进入循环，直接将栈顶的值放入最终结果，接着用一个节点存栈顶元素，再删除栈顶，注意此时先判断这个节点的左，再判断右，因为循环结束后，需要反转整个vector结果才能得到最终结果。
+
+```
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> result;
+        if (root == nullptr) {
+            return result;
+        }
+        stack<TreeNode*> st;
+        st.push(root);
+        
+        while (!st.empty()) {
+            TreeNode* node = st.top();
+            st.pop();
+            result.push_back(node->val);
+            if (node->left) st.push(node->left);
+            if (node->right) st.push(node->right);
+        }
+        reverse(result.begin(), result.end());
+        return result;
+    }
+};
+```
+
+中序遍历需要使用一个指针访问到最底部的元素，首先一个cur结点指向根结点，然后进入循环，如果cur结点不为空或者栈不为空，则一直循环，循环中判断cur是否为空，不为空则将cur结点放入栈中，cur则指向cur左。如果cur为空则使用一个node结点存栈顶结点，然后删除栈顶结点，将结点的值放入结果中，cur指向node结点的右。最终返回结果。思路大体就是从根节点一直往最左下找，每个最左边的都入栈。当找到的为空，则开始删栈顶，之后往右找。
+
+```
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> result;
+        if (root == nullptr) {
+            return result;
+        }
+        stack<TreeNode*> st;
+        TreeNode* cur = root;
+        while (cur != nullptr || !st.empty()) {
+            if (cur != nullptr) {
+                st.push(cur);
+                cur = cur->left;
+            } else {
+                TreeNode* node = st.top();
+                st.pop();
+                result.push_back(node->val);
+                cur = node->right;
+            }
+        }
+        return result;
+    }
+};
+```
+
 
 ----------
 
