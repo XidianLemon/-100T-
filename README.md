@@ -121,10 +121,60 @@
 
 4.不同路径
 
+5.不同路径 II
+
 
 ----------
 
 ## 八、动态规划
+
+----------
+
+## 5.不同路径 II
+这道题和上一题不一样的地方在于初始化dp数组的时候，遇到障碍物后，后面的dp全都置0。在循环中递推的时候，若遇见障碍物，则那一位的dp置0。注意题目给的参数是表示含有障碍物的二维数组。上一题的参数两个int，因为里面没有障碍物。dp数组是dp数组，障碍物数组是障碍物数组。
+
+```
+class Solution {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        int m = obstacleGrid.size();
+        int n = obstacleGrid[0].size();
+
+        vector<vector<int>> dp(m, vector<int>(n, 0));
+        for (int i = 0; i < m; i++) {
+            if (obstacleGrid[i][0] == 1) {
+                break;
+            }
+            dp[i][0] = 1;
+        }
+        for (int j = 0; j < n; j++) {
+            if (obstacleGrid[0][j] == 1) {
+                break;
+            }
+            dp[0][j] = 1;
+        }
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (obstacleGrid[i][j] == 0) {
+                    dp[i][j] = dp[i-1][j] + dp[i][j-1];
+                } else {
+                    dp[i][j] = 0;
+                }
+            }
+        }
+        return dp[m-1][n-1];
+    }
+};
+
+//1.dp数组的含义：dp[i][j]表示第i行第j列走到这里有多少不同的路
+//2.递推公式：dp[i][j] = dp[i-1][j] + dp[i][j-1]，若遇见障碍物，则该dp数组为0
+//3.初始化dp：dp[i][0]都为1，若遇见障碍物，之后都为0，dp[0][j]都为1，若遇见障碍物，之后都为0
+//4.遍历顺序，从左往右，从上到下
+//5.列递归
+//  1   1   1
+//  1   0   1
+//  1   1   2
+```
 
 ----------
 
