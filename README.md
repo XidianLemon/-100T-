@@ -4,6 +4,8 @@
 ### 一、数组
 1.二分查找
 
+1.1.x的平方根
+
 2.移除元素
 
 3.有序数组的平方
@@ -2211,6 +2213,46 @@ public:
     };
 
 ----------
+
+## 1.1.x的平方根
+
+这题首先要推公式，求出迭代公式然后在迭代后，判断是否超过了一个很小的数比如1e-7，超过了就停止。迭代公式就是根据直线方程求得的，直线方程的斜率就是x方的导数，也就是2x。值得注意的是这只是整数的平方根，如果要求小数比如0~1之间的数的平方根就是另一种做法了，暂未研究。
+
+```
+class Solution {
+public:
+    int mySqrtInt(int x) {
+        if (x == 0) {
+            return 0;
+        }
+
+        double C = x, x0 = x;
+        while (true) {
+            double xi = 0.5 * (x0 + C / x0);
+            if (fabs(x0 - xi) < 1e-7) {
+                break;
+            }
+            x0 = xi;
+        }
+        return int(x0);
+    }
+    double mySqrtDouble(int x) {
+        if (x == 0) {
+            return 0;
+        }
+
+        double C = x, x0 = x;
+        while (true) {
+            double xi = 0.5 * (x0 + C / x0);
+            if (fabs(x0 - xi) < 1e-7) {
+                break;
+            }
+            x0 = xi;
+        }
+        return x0;
+    }
+};
+```
 
 ## 1.二分查找
 
