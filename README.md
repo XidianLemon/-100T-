@@ -6,6 +6,8 @@
 
 1.1.x的平方根
 
+1.2.搜索插入位置
+
 2.移除元素
 
 3.有序数组的平方
@@ -2213,6 +2215,32 @@ public:
     };
 
 ----------
+
+## 1.2.搜索插入位置
+
+这题和二分查找类似，在最后返回right + 1，如果size为0，则直接返回-1。在二分查找完毕后，如果找到了则直接返回middle，如果没找到则此时的right正好在middle-1的位置，返回right+1就可以了。
+
+```
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size() - 1;
+        while (left <= right) {
+            int middle = left + ((right - left) / 2);
+            if (nums[middle] > target) {
+                right = middle - 1;
+            } else if (nums[middle] < target) {
+                left = middle + 1;
+            } else {
+                return middle;
+            }
+        }
+        return right + 1;
+    }
+};
+```
+
 
 ## 1.1.x的平方根
 
