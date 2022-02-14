@@ -8,6 +8,8 @@
 
 1.2.搜索插入位置
 
+1.3.在排序数组中查找元素的第一个和最后一个位置
+
 2.移除元素
 
 3.有序数组的平方
@@ -2215,6 +2217,67 @@ public:
     };
 
 ----------
+
+## 1.3.在排序数组中查找元素的第一个和最后一个位置
+
+先找出左右边界，我需要找到的是左边界的左边第一个位置和右边界的右边第一个位置！为什么？
+
+因为这道题总共有三种情况，1不在整个数组范围超出了数组范围，在两边，比如  {1，3，5}  我要找0或者6  ；2.不在整个数组范围，在中间，比如{1，3，5}，我要找2  ；3.在数组范围。
+
+我设置初始左右边界都是-2，二分查找是不断地向中间找，那么如果我找的左右边界有一项为-2，就说明超出了数组范围，情况1；如果我找了一圈右边界的右边的第一个位置 减去 左边界左边的第一个位置，大于1，则说明已经找到了，那么我返回的就是左边界的左边第一个位置 + 1（即左边界），右边界右边的第一个位置 - 1（即右边界），情况2；如果右边界右边第一个位置 和  左边界左边第一个位置都不是-2，且差也不大于1，这时候说明左右边界重合了，且没有找到！因为在右边界右边第一个位置 - 左边界左边第一个位置，哪怕有一个元素，这个差也要大于1！
+
+以左边界为例，使用二分查找，终止条件同样是left<=right，和二分查找不同的地方在于，每次迭代时，如果nums[mid]>=target时，我应当记录下来此时的mid-1这个位置，因为在这时，mid-1的右边都找过了，绝对不是左边界的左边一个，而mid-1这一项可能是左边界，因此我此时就记录下来，一旦迭代终止，我就跳出循环，输出左边界。注意：此时等于也算，为啥呢，找到了等于的，它不一定是左边界，这是因为有连续的，因此还需要接着找，直到终止条件left<=right。 所以这里nums[mid]>=target处理方式一样，同样都是将左边的放到mid-1的位置，记录暂时左边界。
+
+右边界同理了，只要将>=改成<=，记录mid+1的位置为临时右边界。
+
+题目首先找到左右边界，然后根据三种情况，先判断是否有一个是-2（情况1），然后判断左右边界的差是否大于1（情况2），否则返回-1，-1（情况3）。
+
+```
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int leftBorder = getLeftBorder(nums, target);
+        int rightBorder = getRightBorder(nums, target);
+        // 情况一
+        if (leftBorder == -2 || rightBorder == -2) return {-1, -1};
+        // 情况三
+        if (rightBorder - leftBorder > 1) return {leftBorder + 1, rightBorder - 1};
+        // 情况二
+        return {-1, -1};
+    }
+private:
+     int getRightBorder(vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size() - 1;
+        int rightBorder = -2; // 记录一下rightBorder没有被赋值的情况
+        while (left <= right) {
+            int middle = left + ((right - left) / 2);
+            if (nums[middle] > target) {
+                right = middle - 1;
+            } else { // 寻找右边界，nums[middle] == target的时候更新left
+                left = middle + 1;
+                rightBorder = left;
+            }
+        }
+        return rightBorder;
+    }
+    int getLeftBorder(vector<int>& nums, int target) {
+        int left = 0;
+        int right = nums.size() - 1;
+        int leftBorder = -2; // 记录一下leftBorder没有被赋值的情况
+        while (left <= right) {
+            int middle = left + ((right - left) / 2);
+            if (nums[middle] >= target) { // 寻找左边界，nums[middle] == target的时候更新right
+                right = middle - 1;
+                leftBorder = right;
+            } else {
+                left = middle + 1;
+            }
+        }
+        return leftBorder;
+    }
+};
+```
 
 ## 1.2.搜索插入位置
 
