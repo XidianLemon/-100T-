@@ -10,6 +10,8 @@
 
 1.3.在排序数组中查找元素的第一个和最后一个位置
 
+1.4.有效的完全平方数
+
 2.移除元素
 
 3.有序数组的平方
@@ -2217,6 +2219,28 @@ public:
     };
 
 ----------
+
+## 1.4.有效的完全平方数
+
+同样推出迭代公式，然后上次和这次相减，很小的话就break。然后判断此时的x的平方是不是给的那个数，返回是或者不是。
+
+```
+class Solution {
+public:
+    bool isPerfectSquare(int num) {
+        double x0 = num;
+        while (true) {
+            double x1 = (x0 + num / x0) / 2;
+            if (x0 - x1 < 1e-6) {
+                break;
+            }
+            x0 = x1;
+        }
+        int x = (int) x0;
+        return x * x == num;
+    }
+};
+```
 
 ## 1.3.在排序数组中查找元素的第一个和最后一个位置
 
