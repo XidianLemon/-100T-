@@ -2196,7 +2196,26 @@ public:
 
 ## 2.4.移动零
 
-这道题我需要将0移动到后面去，
+这道题我需要将0移动到后面去，一开始同样令fast和slow都在0，然后让快的和0比较，不等于就让快慢交换，然后一起走，等于0就只让快的走。由于0要移动到末尾，而且要保持相对顺序，因此我从头开始遍历，fast遇到的第一个不为0的我让fast和slow交换，保证了交换给slow的不是0，而且是第一个不是0的，然后一起走一个，再判断。
+
+```
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        int size = nums.size();
+        int slow = 0;
+        for (int fast = 0; fast < size; fast++) {
+            if (nums[fast] != 0) {
+                swap(nums[slow], nums[fast]);
+                slow++;
+            }
+        }
+    }
+};
+
+//  1, 3, 12, 0, 0
+//        s      f
+```
 
 ## 2.3.所有删除重复项的总结
 
