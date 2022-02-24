@@ -22,6 +22,8 @@
 
 2.4.移动零
 
+2.5.比较含退格的字符串
+
 3.有序数组的平方
 
 4.长度最小的子数组
@@ -2193,6 +2195,35 @@ public:
     };
 
 ----------
+
+## 2.5.比较含退格的字符串
+
+搞一个字符串tmp，分别遍历给定的两个字符串，从头遍历，当遇到#号，就删除tmp最后的，如果没遇到，就一直往里放。另一个字符串遍历的时候可以搞个tmp1，往里删放，最后就看tmp和tmp1是不是一样的。
+
+```
+class Solution {
+public:
+    bool backspaceCompare(string S, string T) {
+        return build(S) == build(T);
+    }
+
+    string build(string str) {
+        string ret;
+        for (char ch : str) {
+            if (ch != '#') {
+                ret.push_back(ch);
+            } else if (!ret.empty()) {
+                ret.pop_back();
+            }
+        }
+        return ret;
+    }
+};
+
+// ab#c
+// ad#c
+
+```
 
 ## 2.4.移动零
 
