@@ -30,6 +30,8 @@
 
 4.1.水果成篮
 
+4.2.最小覆盖子串
+
 5.螺旋矩阵II
 
 数组总结
@@ -2112,6 +2114,63 @@ public:
 
 
 ----------
+
+## 4.2.最小覆盖子串
+
+两个哈希，ht存着要找的那个字符的哈希（也就是短的），hs存着滑窗里出现ht里所有字母的哈希（也就是说ht中的字母出现的次数）。定义两个指针ij，表示滑窗。从头开始遍历，如果j处元素在ht中有，则说明此时滑窗中应当加一个，那么hs的j对应这一项应当加1，然后判断当前hs（也就是滑窗中）是否完整的包含了ht，如果全部包含，说明此时滑窗已经包含了完整的，那么我应当收缩滑窗，也就是让i加1，在加之前，我应当判断此时的滑窗是否是长度最小，如果长度最小我应当记录i，为了以后将滑窗中的字符串输出。如果长度不是最小，根本不用记录。在加之前，我还应当判断这个i项是否在ht中，如果在的话，应当让hs哈希里对应的这一项减1（也就是滑窗里出现次数减1）。这样就可以让i加1了，也就是缩滑窗。若缩完以后，hs还是包含完整的ht，那么说明我还可以继续缩，直到包含了完整的ht。直到j出去了，就停止遍历，返回最后存下来的那个i，调用substr，就可以了。
+
+```
+class Solution {
+public:
+    //检查hs中是否包含了ht的全部字符以及个数
+    bool check(unordered_map<char, int> &hs, unordered_map<char, int> &ht){
+        for(unordered_map<char,int>::iterator it=ht.begin();it!=ht.end();it++){
+            if(hs[it->first]<it->second){
+                return false;
+            }
+        }
+        return true;
+    }
+    string minWindow(string s, string t) {
+        unordered_map<char, int> hs; //用于保存字符串s的滑动窗口里元素出现次数
+        unordered_map<char, int> ht; //保存字符串t中各元素出现次数
+
+        int minlen = INT_MAX; //记录最小长度
+        cout<<INT_MAX<<endl;
+        int ansL = -1; //子串的左边起点
+
+        for(int i=0;i<t.size();i++) ht[t[i]]++; //遍历t，并统计各字符出现次数
+        
+        //滑动窗口，让k不断往右移动，找到一个满足条件的子串
+        for(int i=0,j=0;i<=j&&j<s.size();){
+            //如果j处元素在ht中有，那么j处元素也需要保存到hs中
+            if(ht.find(s[j])!=ht.end()) hs[s[j]]++; //往hs里面填充有效元素,非必要的不要放进去
+
+            //如果此时hs已经包含了ht中全部字符，就需要让i往右移
+            while(check(hs,ht)){
+                //如果当前子串长度更小，则更新
+                if(j-i+1<minlen){
+                    minlen = j-i+1;
+                    ansL = i; //记录起点
+                }
+                //如果i处元素在ht中有，将出现hs中对应出现次数-1
+                if(ht.find(s[i])!=ht.end()) hs[s[i]]--; //元素出现次数减1
+                i++; //i往右移
+            }
+            j++; //j继续右移
+        }
+        if(ansL==-1) return "";
+        else{
+            return s.substr(ansL, minlen);
+        }
+    }
+};
+
+
+// A, D, O, B, E, C, O, D, E, B, A, N, C
+//                               i      j
+//临时最短：4
+```
 
 ## 4.1.水果成篮
 
