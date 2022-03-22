@@ -34,6 +34,8 @@
 
 5.螺旋矩阵II
 
+5.1.螺旋矩阵
+
 数组总结
 
 ### 二、链表
@@ -2098,6 +2100,61 @@ public:
 数组内存空间的地址是连续的。
 二维数组在内存的空间地址，不是m*n连续，而是m条连续的地址空间。
 经典题目二分查找，快慢指针，滑动窗口，模拟行为。
+
+## 5.1.螺旋矩阵
+
+首先给上下左右四个边界赋值，四个方向为一圈，即一次循环。当前的上下左右分别为udlr。以从做往右移动为例，一定是搞一个for循环，每循环一次i++，那么i就代表第i列，每次移动后要将给定数组的第u行和第i列那个数放入结果vec中。这个for循环直到i<=r，即走到右边界结束。那么此时上边界的那一行我遍历完了，应当往内圈缩，即u=u+1，若缩进去后，u<d，即当前上边界比下边界还小，则说明遍历完毕，直接break。返回结果。
+
+再以从上到下为例，同样搞一个for循环，每次循环i++，那么i此时代表着第i行，每次移动后要将给定数组的第i行和第r列放入结果vec中。这个for循环同样的，走到i<=d就结束，然后向左缩，若缩进去后r<l，说明当前右边界比左边界还小，则遍历完毕，break，返回结果。
+
+```
+class Solution {
+public:
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        vector <int> ans;
+        if(matrix.empty()) return ans; //若数组为空，直接返回答案
+        int u = 0; //赋值上下左右边界
+        int d = matrix.size() - 1;
+        int l = 0;
+        int r = matrix[0].size() - 1;
+        while(true)
+        {
+            for(int i = l; i <= r; ++i) {
+                ans.push_back(matrix[u][i]); //向右移动直到最右
+                // std::cout<< "matrix[u][i] = " <<matrix[u][i]<<std::endl;
+            }
+            // std::cout<<"u = "<<u<<std::endl;
+            u = u + 1;
+            if(u > d) {
+                break;
+            } //重新设定上边界，若上边界大于下边界，则遍历遍历完成，下同
+
+
+            for(int i = u; i <= d; ++i) {
+                ans.push_back(matrix[i][r]); //向下
+                // std::cout<< "matrix[i][r] = " <<matrix[i][r]<<std::endl;
+            }
+            r = r - 1;
+            if(r < l) break; //重新设定右边界
+
+            for(int i = r; i >= l; --i) {
+                ans.push_back(matrix[d][i]);
+                // std::cout<< "matrix[d][i] = " <<matrix[d][i]<<std::endl;
+            } //向左
+            d = d - 1;
+            if(d < u) break; //重新设定下边界
+
+            for(int i = d; i >= u; --i) {
+                ans.push_back(matrix[i][l]);
+                // std::cout<< "matrix[i][l] = " <<matrix[i][l]<<std::endl;
+            } //向上
+            l = l + 1;
+            if(l > r) break; //重新设定左边界
+        }
+        return ans;
+    }
+};
+```
 
 ## 5.螺旋矩阵II
 首先注意二维数组初始化是这样哦！
