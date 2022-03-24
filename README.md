@@ -58,6 +58,8 @@
 ### 三、哈希表
 1.有效的字母异位词
 
+1.1.字母异位词分组
+
 2.两个数组的交集
 
 3.快乐数
@@ -1686,6 +1688,29 @@ public:
 ```
 
 ----------
+
+## 1.1.字母异位词分组
+
+首先使用一个哈希，哈希类型声明为：键是给定的那个字符串数组中那些包含相同字母的单词，比如说，eta,ate,eat，他们三个我就存eat为键，值就是所有一样的都存到对应键的值里（值是一个vector<string>）。首先遍历给定的string数组，每次遍历时，将那一项的string先赋值给key，key排序，排序后在哈希对应的第key项，将这个string存入。遍历完整个字符串vec后，我取出map的每一项的值，赋值给最终的结果，结果就是一个二维数组。
+    
+```
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> mp;
+        for (string& str: strs) {
+            string key = str;
+            sort(key.begin(), key.end());
+            mp[key].push_back(str);
+        }
+        vector<vector<string>> ans;
+        for (auto it = mp.begin(); it != mp.end(); ++it) {
+            ans.push_back(it->second);
+        }
+        return ans;
+    }
+};
+```
 
 ## 1.有效的字母异位词
 
