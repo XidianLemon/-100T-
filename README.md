@@ -60,6 +60,8 @@
 
 1.1.字母异位词分组
 
+1.2.找到字符串中所有字母异位词
+
 2.两个数组的交集
 
 3.快乐数
@@ -1688,6 +1690,62 @@ public:
 ```
 
 ----------
+
+
+## 1.2.找到字符串中所有字母异位词
+
+搞两个数组，都是26长度，目的是存26个英文字母出现几次，也就是两个哈希。注意在此后，这两个数组先搞在同一个for循环里遍历，for循环的循环次数就是p的长度，也就是说我先在p里面所有出现的字母都先放到p对应的哈希，然后s在前面那些字母出现次数也放在s对应的哈希中。这样我就是相当于完成了一个初始化滑窗的操作，如果此时s和p相等，那么说明s在前p长度就是和p的异位词。把第0个位置直接放入答案里。
+
+接下来的步骤就是操作滑窗了，从0开始到s的长度 - p的长度，每次都让s的哈希在s[i]-'a'这一项减一个，再在s[i+p的长度]-'a'这一项加一个，也就是滑窗往后移动一个，若此时s的哈希和p的哈希相等，则说明此时s的滑窗就是一个异位词，把i+1push到答案里。
+
+```
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        int sLen = s.size(), pLen = p.size();
+
+        if (sLen < pLen) {
+            return vector<int>();
+        }
+
+        vector<int> ans;
+        vector<int> sCount(26);
+        vector<int> pCount(26);
+        for (int i = 0; i < pLen; ++i) {
+            ++sCount[s[i] - 'a'];
+            ++pCount[p[i] - 'a'];
+        }
+
+//        std::cout<<"sCount = ";
+//        for(int i = 0; i < sCount.size(); ++i) {
+//            std::cout << sCount[i] << ",";
+//        }
+//        std::cout << std::endl;
+//
+//        std::cout<<"pCount = ";
+//        for(int i = 0; i < pCount.size(); ++i) {
+//            std::cout << pCount[i] << ",";
+//        }
+//        std::cout << std::endl;
+
+        if (sCount == pCount) {
+            ans.emplace_back(0);
+        }
+
+        for (int i = 0; i < sLen - pLen; ++i) {
+            --sCount[s[i] - 'a'];
+            ++sCount[s[i + pLen] - 'a'];
+
+            if (sCount == pCount) {
+                ans.emplace_back(i + 1);
+            }
+        }
+
+        return ans;
+    }
+};
+```
+
 
 ## 1.1.字母异位词分组
 
