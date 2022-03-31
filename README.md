@@ -64,6 +64,8 @@
 
 2.两个数组的交集
 
+2.1.两个数组的交集 II
+
 3.快乐数
 
 4.两数之和
@@ -1666,6 +1668,34 @@ public:
 ```
 
 ----------
+
+## 2.1.两个数组的交集 II
+
+首先使用一个哈希来存那个短的vec中每个字母出现的次数，然后再遍历那个长的vec，每次遍历时候，如果哈希里存在长的vec这一项，则哈希那一项-1，然后把这一项放进结果vec中。
+
+```
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        if (nums1.size() > nums2.size()) {
+            return intersect(nums2, nums1);
+        }
+
+        unordered_map<int, int> m;
+        vector<int> result;
+        for (int i : nums1) {
+            m[i]++;
+        }
+        for (int i : nums2) {
+            if (m[i] > 0) {
+                m[i]--;
+                result.push_back(i);
+            }
+        }
+        return result;
+    }
+};
+```
 
 ## 2.两个数组的交集
 
