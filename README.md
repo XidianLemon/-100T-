@@ -155,6 +155,115 @@
 
 6.打家劫舍
 
+### 拾遗
+1.走迷宫深度优先搜索
+
+----------
+
+## 拾遗
+
+----------
+
+## 1.走迷宫深度优先搜索
+
+面字节跳动原题，是一道图论的深度优先搜索的题目，给定一个二维数组，从左上走到右下，只能走0，不能走1，把路过的路劲坐标打印出来。
+
+深度优先搜索遍历，在进入dfs时，首先判断是否到达了目标位置如果到了，标志位置true，直接返回，此时返回后，往下执行的地方应当再次判断标志位是否达到了，达到了就直接返回。
+
+深度优先搜索还是上下左右四种走法，搜索顺序就是右下左上，当判断越界了，则搜下一次。若该点没有处于之前搜过的，且不是1（也就是该位置不能走）就标记这个点已经搜过了，然后将该点放入最后的vec里。将该点传入进行下次递归dfs，没搜到的话我就将vec的最后放入的那一项pop_back。同时取消这个点的标记因为没搜索到所以该点一定不在路径中。
+
+测试集尝试了几个。
+
+```
+// 字节跳动原题
+// 0, 0, 1, 0, 0
+// 0, 1, 0, 0, 0
+// 0, 0, 0, 1, 0
+
+// 0, 0, 1, 0, 0
+// 1, 0, 0, 0, 0
+// 0, 0, 0, 1, 0
+
+// 0, 1, 1, 0, 0
+// 0, 0, 1, 0, 0
+// 1, 0, 0, 0, 0
+
+// 0, 1, 0, 0, 0
+// 1, 1, 0, 0, 0
+
+
+class tiktok1 {
+public:
+    void dfs(int x, int y, const vector<vector<int>>& maze, bool& is_find) {
+
+//        std::cout<<"x = " << x<<"," << "y = "<<y<<std::endl;
+
+        int tx,ty,k;
+        if(x==maze.size()-1 && y==maze[0].size()-1)  //判断是否到达小哈的位置
+        {
+//            cor_vec.push_back({x, y});
+            is_find = true;
+            return;
+        }
+        /*枚举四种走法*/
+        for(k=0;k<=3;k++)
+        {
+            /*计算下一个点的坐标*/
+            tx=x+next[k][0];
+            ty=y+next[k][1];
+
+            if(tx<0 || tx>(maze.size()-1) || ty<0 || ty>(maze[0].size()-1))  //判断是否越界
+                continue;
+            /*判断该点是否为障碍物或者已经在路径中*/
+            if(maze[tx][ty]==0 && book[tx][ty]==0)
+            {
+                book[tx][ty]=1;  //标记这个点已经走过
+                cor_vec.push_back({tx, ty});
+                dfs(tx, ty, maze, is_find);  //开始尝试下一个点
+                if (is_find) {
+                    return;
+                }
+                cor_vec.pop_back();
+                book[tx][ty]=0;  //尝试结束，取消这个点的标记
+            }
+        }
+        return;
+    }
+
+    // 输入的maze是个迷宫，里面含有0和1，只能走0，不能走1。从左上，走到右下，把路径坐标打印
+    void FindPath(const vector<vector<int>>& maze) {
+        int startx = 0;
+        int starty = 0;
+
+        book[startx][starty] = 1;
+        bool is_find = false;
+        cor_vec.push_back({0,0});
+        dfs(startx, starty, maze, is_find);
+        for (auto& i : cor_vec) {
+            std::cout<<i[0]<<" "<< i[1]<<std::endl;
+        }
+    }
+
+private:
+    int book[3][5] = {{0}};
+    int next[4][2] = {
+            {0,1},//向右走
+            {1,0},//向下走
+            {0,-1},//向左走
+            {-1,0},//向上走
+    };
+    vector<vector<int>> cor_vec;
+};
+
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+
+    tiktok1 m_tiktok1;
+    vector<vector<int>> maze = {{0, 1, 1, 0, 0}, {0, 0, 1, 0, 0}, {1, 0, 0, 0, 0}};
+    m_tiktok1.FindPath(maze);
+}
+```
+
 
 ----------
 
