@@ -142,6 +142,8 @@
 
 2.二叉树的迭代遍历
 
+3.验证二叉搜索树
+
 ### 八、动态规划
 1.斐波那契数
 
@@ -471,32 +473,27 @@ public:
 
 ## 七、二叉树
 
-## 1.二叉树的递归遍历
+## 3.验证二叉搜索树
 
-递归要注意三点：1.确定参数和返回值；2.确定终止条件；3.确定单层递归逻辑，那么以前序遍历为例，参数就是节点和要返回的那个结果vector，终止条件就是当前遍历节点为空则返回，单层递归逻辑前序就是将节点的值放入。这里背诵的技巧就是前序遍历就是将中节点的值放vec放在前，中序遍历就放中，后序就放后。
+中序遍历的应用，因为要让左节点大于根节点，根节点大于右节点，根节点在中间。
+标准的中序遍历的写法，每次都记录下来前一个节点，这样在中序遍历过程中，只要前一个节点比当前根节点大了，则返回false。直到搜索完就返回true。左子树和右子树都找完，就返回两者的交集，有一个是假，就是假。
 
 ```
 class Solution {
 public:
-    void traversal(TreeNode* cur, vector<int>& vec) {
-        if (cur == nullptr) {
-            return;
-        }
-        //vec.push_back(cur->val);前
-        traversal(cur->left, vec);
-        //vec.push_back(cur->val);中
-        traversal(cur->right, vec);
-        //vec.push_back(cur->val);后
-    }
-    vector<int> postorderTraversal(TreeNode* root) {
-        vector<int> result;
-        traversal(root, result);
-        return result;
+    TreeNode* pre = NULL; // 用来记录前一个节点
+    bool isValidBST(TreeNode* root) {
+        if (root == NULL) return true;
+        bool left = isValidBST(root->left);
+
+        if (pre != NULL && pre->val >= root->val) return false;
+        pre = root; // 记录前一个节点
+
+        bool right = isValidBST(root->right);
+        return left && right;
     }
 };
 ```
-
-----------
 
 ## 2.二叉树的迭代遍历
 
@@ -577,7 +574,32 @@ public:
     }
 };
 ```
+----------
 
+## 1.二叉树的递归遍历
+
+递归要注意三点：1.确定参数和返回值；2.确定终止条件；3.确定单层递归逻辑，那么以前序遍历为例，参数就是节点和要返回的那个结果vector，终止条件就是当前遍历节点为空则返回，单层递归逻辑前序就是将节点的值放入。这里背诵的技巧就是前序遍历就是将中节点的值放vec放在前，中序遍历就放中，后序就放后。
+
+```
+class Solution {
+public:
+    void traversal(TreeNode* cur, vector<int>& vec) {
+        if (cur == nullptr) {
+            return;
+        }
+        //vec.push_back(cur->val);前
+        traversal(cur->left, vec);
+        //vec.push_back(cur->val);中
+        traversal(cur->right, vec);
+        //vec.push_back(cur->val);后
+    }
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> result;
+        traversal(root, result);
+        return result;
+    }
+};
+```
 
 ----------
 
