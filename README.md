@@ -475,7 +475,9 @@ public:
 
 ## 3.验证二叉搜索树
 
-中序遍历的应用，因为要让左节点大于根节点，根节点大于右节点，根节点在中间。
+递归法
+
+中序遍历的应用，因为要让左节点小于根节点，根节点小于右节点，根节点在中间。
 标准的中序遍历的写法，每次都记录下来前一个节点，这样在中序遍历过程中，只要前一个节点比当前根节点大了，则返回false。直到搜索完就返回true。左子树和右子树都找完，就返回两者的交集，有一个是假，就是假。
 
 ```
@@ -491,6 +493,35 @@ public:
 
         bool right = isValidBST(root->right);
         return left && right;
+    }
+};
+```
+
+迭代法
+
+同样是中序遍历的应用，每次都记录下来前一个节点，在中序遍历过程中，只要前一个比当前根节点大了根节点大了，则返回false。
+
+```
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        stack<TreeNode*> st;
+        TreeNode* cur = root;
+        TreeNode* pre = NULL;
+        while (cur != NULL || !st.empty()) {
+            if (cur != NULL) { // 指针来访问节点，访问到最底层
+                st.push(cur); // 将访问的节点放进栈
+                cur = cur->left;                // 左
+            } else {
+                cur = st.top(); // 中
+                st.pop();
+                if (pre != NULL && cur->val <= pre->val)
+                    return false;
+                pre = cur;
+                cur = cur->right;               // 右
+            }
+        }
+        return true;
     }
 };
 ```
