@@ -144,6 +144,8 @@
 
 3.验证二叉搜索树
 
+4.二叉树的最近公共祖先
+
 ### 八、动态规划
 1.斐波那契数
 
@@ -472,6 +474,33 @@ public:
 ----------
 
 ## 七、二叉树
+
+## 4.二叉树的最近公共祖先
+
+这道题从底向上查找，符合后序遍历。几种情况：1.一个节点，它的左子树出现节点p，右子树出现节点q，那么该节点就是最近的公共祖先。情况2：节点本身就是p，他的子孙节点有q，那么他本身就是最近的公共祖先。
+
+递归三步：1.确定递归函数返回值和参数：要返回最近的公共祖先，没有就是null。2.确定终止条件：如果找到了节点qp，或者到头了，就返回。3.确定单层递归逻辑：要遍历整颗树，left和right都遍历完成才可以返回。
+
+```
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root == q || root == p || root == NULL) return root;
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+        if (left != NULL && right != NULL) return root;
+
+        if (left == NULL && right != NULL) return right;
+        else if (left != NULL && right == NULL) return left;
+        else  { //  (left == NULL && right == NULL)
+            return NULL;
+        }
+
+    }
+};
+```
+
+----------
 
 ## 3.验证二叉搜索树
 
