@@ -146,6 +146,8 @@
 
 4.二叉树的最近公共祖先
 
+5.二叉搜索树的最近公共祖先
+
 ### 八、动态规划
 1.斐波那契数
 
@@ -474,6 +476,25 @@ public:
 ----------
 
 ## 七、二叉树
+
+## 5.二叉搜索树的最近公共祖先
+
+递归法
+
+三部曲：1.确定递归函数的返回值以及参数，返回值是最近的公共祖先，参数就是当前节点和两个节点pq。2.确定终止条件，找到头了就返回。3.确定单层递归逻辑，二叉搜索数的性质就是左边比右边小，那么如果当前的值大于p值，且大于p值，那么就应该往左子树找。如果都小于则往右子树找。而一个大于一个小于，说明当前就是最近公共祖先了！要注意搜索的是一条边，如果这条边没有就找另一条边，而不是搜索整棵树。
+
+```
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (root->val > p->val && root->val > q->val) {
+            return lowestCommonAncestor(root->left, p, q);
+        } else if (root->val < p->val && root->val < q->val) {
+            return lowestCommonAncestor(root->right, p, q);
+        } else return root;
+    }
+};
+```
 
 ## 4.二叉树的最近公共祖先
 
