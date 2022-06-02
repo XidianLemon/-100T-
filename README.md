@@ -164,9 +164,101 @@
 ### 拾遗
 1.走迷宫深度优先搜索
 
+2.找连通域
+
 ----------
 
 ## 拾遗
+
+----------
+
+## 2.找连通域
+面小鹏汽车，给定一个二维01数组，问里面有多少连着的1，注意连着的1不包括斜着的，只能上下左右连通，才能叫连通域。
+
+首先两个for循环，当找到第一个1，我从这个1开始深度优先搜索，每搜索到一个1，就将该处的1置0。那么我还得有一个数组，专门记录我走过的路，一开始这个数组和给定的那个迷宫大小一样，但是全0，每走过一格，就令该格置1。在深搜时候首先判断是否越界，没越界就判断是否该处是1，且没有走过。都满足我就再往里搜，搜之前记得将该点置0，且标记该点已经走过。直到所有的都搜完（指的是外面那两个for循环）。当然了，每次找到第一个1，我就将连通域计数+1。
+
+```
+#include <iostream>
+#include <math.h>
+#include<limits.h>
+#include <vector>
+#include <unordered_map>
+#include <algorithm>
+
+using namespace std;
+
+class tiktok2 {
+
+private:
+    vector<vector<int>> next_ = {{0,1},//向右走
+                                {1,0},//向下走
+                                {0,-1},//向左走
+                                {-1,0}};//向上走
+    vector<vector<int>> cor_vec_ = {{0, 1, 0, 0, 0, 1, 1},
+                                    {1, 1, 0, 0, 0, 1, 1},
+                                    {0, 0, 0, 1, 0, 0, 0},
+                                    {0, 0, 0, 1, 1, 1, 0},
+                                    {1, 0, 0, 0, 0, 1, 0},
+                                    {1, 0, 0, 0, 0, 1, 0}};
+    int record_passed_vec_[6][7] = {{0}}; // 记录走过的路，最开始全是0，走过了就标1
+
+public:
+    void dfs(int x, int y, const vector<vector<int>>& maze) {
+
+        int tx, ty, k;
+
+        /*枚举四种走法*/
+        for (k = 0; k <= 3; k++) {
+            /*计算下一个点的坐标*/
+            tx = x + next_[k][0];
+            ty = y + next_[k][1];
+
+            //判断是否越界
+            if ((tx < 0) || (tx > (maze.size() - 1)) || (ty<0) || (ty > (maze[0].size() - 1)))
+                continue;
+
+            // 判断该点是否是1（也就属于连通域内），还判断该点是否已经走过了，
+            if ((maze[tx][ty] == 1) && (record_passed_vec_[tx][ty] == 0)) {
+                record_passed_vec_[tx][ty] = 1;  // 标记这个点已经走过
+                cor_vec_[tx][ty] = 0; // 标记该点为0
+                dfs(tx, ty, maze);  // 开始尝试下一个点
+            }
+        }
+        return;
+    }
+
+    int FindConnectedDomain() {
+
+        int count_connectdomain_result = 0;
+
+        for (int i = 0; i < cor_vec_.size(); i++) {
+            for (int j = 0; j < cor_vec_[0].size(); j++) {
+
+                // 走过了就是1，这个数组专门记录走过的
+                record_passed_vec_[i][j] = 1;
+
+                if (cor_vec_[i][j] == 1) { // 当找到了第一个1，则开始寻找此坐标的上下左右为1的值，直到找不下去了
+                    dfs(i, j, cor_vec_);
+
+                    // 找完一个连通域，连通域个数+1
+                    count_connectdomain_result++;
+                }
+            }
+        }
+        return count_connectdomain_result;
+    }
+};
+
+int main() {
+    std::cout << "Hello, World!" << std::endl;
+
+    tiktok2 m_tiktok2;
+    int result = m_tiktok2.FindConnectedDomain();
+    std::cout << result << std::endl;
+
+    return 0;
+}
+```
 
 ----------
 
